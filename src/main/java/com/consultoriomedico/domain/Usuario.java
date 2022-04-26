@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 public class Usuario extends Entidad {
 
-    @Id
     private String nombre;
     private String direccion;
     private String telefono;

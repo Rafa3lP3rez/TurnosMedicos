@@ -9,7 +9,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Entidad {
-    @Id
     private int id;
     private Date creadoEn;
 }
