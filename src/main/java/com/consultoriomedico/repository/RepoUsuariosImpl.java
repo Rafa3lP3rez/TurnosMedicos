@@ -50,6 +50,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                 usuario.setCreadoEn(new Date(Integer.parseInt(partesDeUsuario[5])));
                 usuarios.add(usuario);
                 lectura = usuariotTxt.readLine();
+                //Comentario para commit
             }
         }
         return usuarios;
