@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface GestionUsuarios {
 
+    void crearUsuario ();
+
 }

@@ -1,7 +1,6 @@
 package com.consultoriomedico.repository;
 
 import com.consultoriomedico.domain.Usuario;
-
 import java.io.IOException;
 import java.util.List;
 
