@@ -1,7 +1,6 @@
 package com.consultoriomedico.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
@@ -9,7 +8,6 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Entidad {
-    @Id
     private int id;
     private Date creadoEn;
 }

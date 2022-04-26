@@ -50,28 +50,28 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                 usuario.setCreadoEn(new Date(Integer.parseInt(partesDeUsuario[5])));
                 usuarios.add(usuario);
                 lectura = usuariotTxt.readLine();
+                //Comentario para commit
             }
         }
         return usuarios;
     }
 
-    public List<Usuario> buscarPorId(int id) throws IOException {
-        List<Usuario> usuarios = new ArrayList<>();
-        //while (usuarios != null) {
-        //    if (id == null) {
-        //        throw new IOException();
-        //    }
-        //}
+    public Usuario buscarPorId(int id) throws IOException {
+        Usuario usuario = null;
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
             String lectura = usuariotTxt.readLine();
             while (lectura != null) {
                 String[] partesDeUsuario = lectura.split("; ");
-                Usuario usuario = new Usuario();
-                id = Integer.parseInt(partesDeUsuario[0]);
-                usuarios.get(id);
+                if (id == Integer.parseInt(partesDeUsuario[0])) {
+                    usuario.setNombre((partesDeUsuario[1]));
+                    usuario.setEmail((partesDeUsuario[2]));
+                    usuario.setTelefono((partesDeUsuario[3]));
+                    usuario.setDireccion((partesDeUsuario[4]));
+                    usuario.setCreadoEn(new Date(Integer.parseInt(partesDeUsuario[5])));
+                }
                 lectura = usuariotTxt.readLine();
             }
         }
-        return this.buscarPorId(id);
+        return usuario;
     }
 }

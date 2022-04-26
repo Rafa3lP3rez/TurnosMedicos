@@ -10,6 +10,6 @@ public interface RepoUsuarios {
 
     List<Usuario> listar() throws IOException;
 
-    List<Usuario> buscarPorId(int id) throws IOException;
+    Usuario buscarPorId(int id) throws IOException;
 
 }
