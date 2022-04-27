@@ -1,6 +1,7 @@
 package com.consultoriomedico.repository;
 
 import com.consultoriomedico.domain.Doctor;
+import com.consultoriomedico.domain.EmailSender;
 import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
 
@@ -62,12 +63,24 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                     assert usuario instanceof Doctor;
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
                 }
+                sendMail(usuario);
             } catch(Exception e) {
                 log.error(e);
                 log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
             } finally {
                 log.info("[RepoUsuariosImpl][grabar] Fin de llamada grabación usuario");
             }
+        }
+    }
+
+    public static void sendMail(Usuario usuario){
+        try {
+            log.info("[RepoUsuariosImpl][sendMail] Enviando correo de confirmación");
+            EmailSender sender = EmailSender.builder().build();
+            sender.sendMail(usuario.getEmail(), "Correo Prueba", "Este es un correo de prueba");
+        }catch(Exception e) {
+            log.error(e);
+            log.info("[RepoUsuariosImpl][sendMail] Error al enviar el correo de confirmación");
         }
     }
 
