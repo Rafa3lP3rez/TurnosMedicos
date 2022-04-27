@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface RepoUsuarios {
-    void grabar(Usuario usuario) throws IOException;
+    public static void grabar(Object usuario) throws IOException {}
 
     List<Usuario> listar() throws IOException;
 
