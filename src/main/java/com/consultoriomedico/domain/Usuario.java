@@ -1,16 +1,12 @@
 package com.consultoriomedico.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@SuperBuilder
 public class Usuario extends Entidad {
 
     private boolean flagDoctor;
@@ -19,13 +15,4 @@ public class Usuario extends Entidad {
     private String telefono;
     private String email;
 
-
-    public Usuario(int id, Date creadoEn, boolean flagDoctor, String nombre, String direccion, String telefono, String email) {
-        super(id, creadoEn);
-        this.flagDoctor = flagDoctor;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.email = email;
-    }
 }

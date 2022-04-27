@@ -1,15 +1,14 @@
 package com.consultoriomedico.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
-
+@SuperBuilder
+@ToString(callSuper = true)
 public class Paciente extends Usuario {
-    public Paciente (int id, Date creadoEn, Boolean flagDoctor, String nombre, String direccion, String telefono, String email){
-        super(id, creadoEn, flagDoctor, nombre, direccion, telefono, email);
-    }
+
 }

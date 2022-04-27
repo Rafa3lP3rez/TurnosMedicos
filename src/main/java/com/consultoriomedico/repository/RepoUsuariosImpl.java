@@ -6,7 +6,6 @@ import com.consultoriomedico.domain.Usuario;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import org.apache.log4j.Logger;
@@ -14,33 +13,29 @@ import org.apache.log4j.Logger;
 public class RepoUsuariosImpl implements RepoUsuarios {
     public static final String USUARIO_TXT = "usuario.txt";
     public static final Logger log = Logger.getLogger(RepoUsuariosImpl.class);
-    private static final SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
-
 
     public static void grabar(Object object) throws IOException {
+        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         Usuario usuario;
         if (object instanceof Paciente paciente){
-            usuario = new Paciente(
-                    (paciente).getId(),
-                    (paciente).getCreadoEn(),
-                    (paciente).isFlagDoctor(),
-                    (paciente).getNombre(),
-                    (paciente).getDireccion(),
-                    (paciente).getTelefono(),
-                    (paciente).getEmail()
-            );
+            usuario = Paciente.builder().id(paciente.getId())
+                    .creadoEn(paciente.getCreadoEn())
+                    .flagDoctor(paciente.isFlagDoctor())
+                    .nombre(paciente.getNombre())
+                    .direccion(paciente.getDireccion())
+                    .telefono(paciente.getTelefono())
+                    .email(paciente.getEmail())
+                    .build();
         } else if (object instanceof Doctor doctor) {
-            usuario = new Doctor(
-                    (doctor).getId(),
-                    (doctor).getCreadoEn(),
-                    (doctor).isFlagDoctor(),
-                    (doctor).getNombre(),
-                    (doctor).getDireccion(),
-                    (doctor).getTelefono(),
-                    (doctor).getEmail(),
-                    (doctor).getEspecialidad()
-            );
+            usuario = Doctor.builder().id(doctor.getId())
+                    .creadoEn(doctor.getCreadoEn())
+                    .especialidad(doctor.getEspecialidad())
+                    .flagDoctor(doctor.isFlagDoctor())
+                    .nombre(doctor.getNombre())
+                    .direccion(doctor.getDireccion())
+                    .telefono(doctor.getTelefono())
+                    .email(doctor.getEmail()).build();
         } else {
             usuario = null;
         }
@@ -48,6 +43,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         if (usuario != null){
             int flagDoctorNumber = usuario.isFlagDoctor() ? 1:0;
             try (BufferedWriter usuarioTxt = new BufferedWriter(new FileWriter(USUARIO_TXT, true))) {
+                usuarioTxt.newLine();
                 usuarioTxt.append(String.valueOf(usuario.getId()));
                 usuarioTxt.append("; ");
                 usuarioTxt.append(dt1.format(usuario.getCreadoEn()));
@@ -61,15 +57,14 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                 usuarioTxt.append(usuario.getTelefono());
                 usuarioTxt.append("; ");
                 usuarioTxt.append(usuario.getEmail());
-                if (((Usuario) object).isFlagDoctor()){
+                if (usuario.isFlagDoctor()){
                     usuarioTxt.append("; ");
                     assert usuario instanceof Doctor;
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
-                    usuarioTxt.append("; ");
                 }
-                usuarioTxt.newLine();
             } catch(Exception e) {
                 log.error(e);
+                log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
             } finally {
                 log.info("[RepoUsuariosImpl][grabar] Fin de llamada grabación usuario");
             }
@@ -77,44 +72,12 @@ public class RepoUsuariosImpl implements RepoUsuarios {
     }
 
     public List<Usuario> listar() throws IOException {
-        //TODO: ARREGLAR IMPLEMENTACIÓN//
-        List<Usuario> usuarios = new ArrayList<>();
-        try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
-            String lectura = usuariotTxt.readLine();
-            while (lectura != null) {
-                String[] partesDeUsuario = lectura.split("; ");
-                Usuario usuario = new Usuario();
-                usuario.setId(Integer.parseInt(partesDeUsuario[0]));
-                usuario.setNombre((partesDeUsuario[1]));
-                usuario.setEmail((partesDeUsuario[2]));
-                usuario.setTelefono((partesDeUsuario[3]));
-                usuario.setDireccion((partesDeUsuario[4]));
-                usuario.setCreadoEn(new Date(Integer.parseInt(partesDeUsuario[5])));
-                usuarios.add(usuario);
-                lectura = usuariotTxt.readLine();
-                //Comentario para commit
-            }
-        }
-        return usuarios;
+        return new ArrayList<>();
     }
 
     public Usuario buscarPorId(int id) throws IOException {
-        //TODO: ARREGLAR IMPLEMENTACIÓN//
-        Usuario usuario = null;
-        try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
-            String lectura = usuariotTxt.readLine();
-            while (lectura != null) {
-                String[] partesDeUsuario = lectura.split("; ");
-                if (id == Integer.parseInt(partesDeUsuario[0])) {
-                    usuario.setNombre((partesDeUsuario[1]));
-                    usuario.setEmail((partesDeUsuario[2]));
-                    usuario.setTelefono((partesDeUsuario[3]));
-                    usuario.setDireccion((partesDeUsuario[4]));
-                    usuario.setCreadoEn(new Date(Integer.parseInt(partesDeUsuario[5])));
-                }
-                lectura = usuariotTxt.readLine();
-            }
-        }
-        return usuario;
+        return Usuario.builder().build();
     }
+
+
 }

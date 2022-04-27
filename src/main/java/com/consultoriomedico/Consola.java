@@ -8,8 +8,8 @@ public class Consola {
     private static final Logger log = Logger.getLogger(Consola.class);
 
     public static void main(String[] args) {
-        log.debug("Iniciando Programa");
+        log.info("Iniciando Programa");
         GestionUsuariosImpl.crearUsuario();
-        log.debug("Finalizando Programa");
+        log.info("Finalizando Programa");
     }
 }
