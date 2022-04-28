@@ -1,7 +1,11 @@
 package com.consultoriomedico.domain;
 
-import lombok.Builder;
 
+import lombok.Builder;
+import org.apache.log4j.Logger;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -12,25 +16,33 @@ public class EmailSender {
     private static String host = "smtp.mailtrap.io";
     private static int port = 25;
     private static boolean debug = true;
+    public static final String CONFIG_FILE_PATH = "src/main/resources/config.properties";
+    private static final Logger log = Logger.getLogger(EmailSender.class);
 
-    private static String username = "clinicakodigo@gmail.com";
-    private static String password = "@projectKodigo2022";
 
     private static String senderEmail = "clinicakodigo@gmail.com";
 
-    public void sendMail( String to, String subject, String content ) {
+    public void sendMail( String to, String subject, String content ){
+        Properties propConfig = new Properties();
+        try(FileInputStream propInput = new FileInputStream(CONFIG_FILE_PATH)) {
+            propConfig.load(propInput);
+        } catch (IOException e) {
+            log.error(e);
+        }
 
-        // Set Properties
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com"); //SMTP Host
         props.put("mail.smtp.port", "587"); //TLS Port
         props.put("mail.smtp.auth", "true"); //enable authentication
         props.put("mail.smtp.starttls.enable", "true"); //enable STARTTLS
 
+        System.out.println(propConfig.getProperty("username"));
+        System.out.println(propConfig.getProperty("password"));
+
         Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(propConfig.getProperty("username"), propConfig.getProperty("password"));
             }
         };
         Session session = Session.getInstance(props, auth);
