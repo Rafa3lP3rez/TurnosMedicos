@@ -2,13 +2,16 @@ package com.consultoriomedico.repository;
 
 import com.consultoriomedico.domain.Usuario;
 import java.io.IOException;
-import java.util.List;
 
 public interface RepoUsuarios {
     public static void grabar(Object usuario) throws IOException {}
 
-    List<Usuario> listar() throws IOException;
+    public static Object[] listarUsuarios(){
+        return new Object[]{};
+    }
 
-    Usuario buscarPorId(int id) throws IOException;
+    public static Usuario buscarPorId(){
+        return Usuario.builder().build();
+    }
 
 }

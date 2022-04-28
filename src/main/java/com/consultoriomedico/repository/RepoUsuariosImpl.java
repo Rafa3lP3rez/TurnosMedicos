@@ -6,20 +6,28 @@ import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 
 public class RepoUsuariosImpl implements RepoUsuarios {
     public static final String USUARIO_TXT = "usuario.txt";
     public static final Logger log = Logger.getLogger(RepoUsuariosImpl.class);
+    private static final DateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+    private RepoUsuariosImpl(){
+
+    }
 
     public static void grabar(Object object) throws IOException {
-        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         Usuario usuario;
-        if (object instanceof Paciente paciente){
+        if (object instanceof Paciente paciente) {
             usuario = Paciente.builder().id(paciente.getId())
                     .creadoEn(paciente.getCreadoEn())
                     .flagDoctor(paciente.isFlagDoctor())
@@ -41,8 +49,8 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             usuario = null;
         }
 
-        if (usuario != null){
-            int flagDoctorNumber = usuario.isFlagDoctor() ? 1:0;
+        if (usuario != null) {
+            int flagDoctorNumber = usuario.isFlagDoctor() ? 1 : 0;
             try (BufferedWriter usuarioTxt = new BufferedWriter(new FileWriter(USUARIO_TXT, true))) {
                 usuarioTxt.newLine();
                 usuarioTxt.append(String.valueOf(usuario.getId()));
@@ -58,13 +66,13 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                 usuarioTxt.append(usuario.getTelefono());
                 usuarioTxt.append("; ");
                 usuarioTxt.append(usuario.getEmail());
-                if (usuario.isFlagDoctor()){
+                if (usuario.isFlagDoctor()) {
                     usuarioTxt.append("; ");
                     assert usuario instanceof Doctor;
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
                 }
-                sendMail(usuario);
-            } catch(Exception e) {
+                sendMailConfirmation(usuario);
+            } catch (Exception e) {
                 log.error(e);
                 log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
             } finally {
@@ -73,24 +81,81 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         }
     }
 
-    public static void sendMail(Usuario usuario){
+    public static void sendMailConfirmation(Usuario usuario) {
         try {
             log.info("[RepoUsuariosImpl][sendMail] Enviando correo de confirmación");
             EmailSender sender = EmailSender.builder().build();
-            sender.sendMail(usuario, "Correo Prueba");
-        }catch(Exception e) {
+            sender.sendMail(usuario, "Correo Confirmación de Registro");
+            log.info("[RepoUsuariosImpl][sendMail] Correo enviado exitosamente de confirmación");
+        } catch (Exception e) {
             log.error(e);
             log.info("[RepoUsuariosImpl][sendMail] Error al enviar el correo de confirmación");
         }
     }
 
-    public List<Usuario> listar() throws IOException {
-        return new ArrayList<>();
+    public static Object[] listarUsuarios() {
+        List<Doctor> listaDoctores = new ArrayList<>();
+        List<Paciente> listaPacientes = new ArrayList<>();
+        try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
+            String line;
+            while ((line = usuariotTxt.readLine()) != null) {
+                String[] partesDeUsuario = line.split("; ");
+                if (partesDeUsuario.length > 1) {
+                    boolean flagDoctor = Integer.parseInt(partesDeUsuario[2]) == 1;
+                    if (flagDoctor) {
+                        Doctor doctor = Doctor.builder()
+                                .id(Integer.parseInt(partesDeUsuario[0]))
+                                .creadoEn(dt1.parse(partesDeUsuario[1]))
+                                .flagDoctor(true)
+                                .nombre(partesDeUsuario[3])
+                                .direccion(partesDeUsuario[4])
+                                .telefono(partesDeUsuario[5])
+                                .email(partesDeUsuario[6])
+                                .especialidad(partesDeUsuario[7])
+                                .build();
+
+                        listaDoctores.add(doctor);
+                    } else {
+                        Paciente paciente = Paciente.builder()
+                                .id(Integer.parseInt(partesDeUsuario[0]))
+                                .creadoEn(dt1.parse(partesDeUsuario[1]))
+                                .flagDoctor(false)
+                                .nombre(partesDeUsuario[3])
+                                .direccion(partesDeUsuario[4])
+                                .telefono(partesDeUsuario[5])
+                                .email(partesDeUsuario[6])
+                                .build();
+                        listaPacientes.add(paciente);
+                    }
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return new Object[]{listaDoctores, listaPacientes};
     }
 
-    public Usuario buscarPorId(int id) throws IOException {
-        return Usuario.builder().build();
+    public static Usuario buscarPorId(int id) {
+        Usuario usuario = null;
+        try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
+            String line;
+            while ((line = usuariotTxt.readLine()) != null) {
+                String[] partesDeUsuario = line.split("; ");
+                if (partesDeUsuario.length > 1 && id == Integer.parseInt(partesDeUsuario[0])) {
+                    usuario = Usuario.builder()
+                            .id(Integer.parseInt(partesDeUsuario[0]))
+                            .creadoEn(dt1.parse(partesDeUsuario[1]))
+                            .flagDoctor(false)
+                            .nombre(partesDeUsuario[3])
+                            .direccion(partesDeUsuario[4])
+                            .telefono(partesDeUsuario[5])
+                            .email(partesDeUsuario[6])
+                            .build();
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return usuario;
     }
-
-
 }
