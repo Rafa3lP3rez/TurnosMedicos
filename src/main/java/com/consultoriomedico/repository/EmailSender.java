@@ -25,9 +25,9 @@ public class EmailSender {
 
     private static String senderEmail = "clinicakodigo@gmail.com";
 
-    public void sendMail(Usuario usuario, String subject){
+    public void sendMail(Usuario usuario, String subject) {
         Properties propConfig = new Properties();
-        try(FileInputStream propInput = new FileInputStream(CONFIG_FILE_PATH)) {
+        try (FileInputStream propInput = new FileInputStream(CONFIG_FILE_PATH)) {
             propConfig.load(propInput);
         } catch (IOException e) {
             log.error(e);
@@ -50,26 +50,25 @@ public class EmailSender {
 
         try {
 
-            MimeMessage message = new MimeMessage( session );
+            MimeMessage message = new MimeMessage(session);
 
             message.addHeader("Content-type", "text/HTML; charset=UTF-8");
             message.addHeader("format", "flowed");
             message.addHeader("Content-Transfer-Encoding", "8bit");
 
 
-            message.setFrom( new InternetAddress(senderEmail));
-            message.setReplyTo( InternetAddress.parse(senderEmail));
-            message.addRecipient( Message.RecipientType.TO, new InternetAddress(usuario.getEmail()) );
-            message.setSubject( subject, "UTF-8" );
+            message.setFrom(new InternetAddress(senderEmail));
+            message.setReplyTo(InternetAddress.parse(senderEmail));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(usuario.getEmail()));
+            message.setSubject(subject, "UTF-8");
 
             String htmlContentStr = modifiedHtmlConfirmation(usuario);
 
-            message.setContent( htmlContentStr, "text/html; charset=utf-8" );
+            message.setContent(htmlContentStr, "text/html; charset=utf-8");
 
             Transport.send(message);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -78,19 +77,19 @@ public class EmailSender {
         File flHtml = new File(MAIL_CONFIRMATION_PATH);
         Document doc = Jsoup.parse(flHtml, "UTF-8", "");
         Element p = doc.getElementById("idNombre");
-        if (p!= null){
-           p.append(usuario.getNombre());
+        if (p != null) {
+            p.append(usuario.getNombre());
         }
         p = doc.getElementById("idIdentificacion");
-        if (p!= null){
+        if (p != null) {
             p.append(String.valueOf(usuario.getId()));
         }
         p = doc.getElementById("idDireccion");
-        if (p!= null){
+        if (p != null) {
             p.append(usuario.getDireccion());
         }
         p = doc.getElementById("idTelefono");
-        if (p!= null){
+        if (p != null) {
             p.append(usuario.getTelefono());
         }
         return doc.html();

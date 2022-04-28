@@ -12,18 +12,20 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
+import lombok.Builder;
 import org.apache.log4j.Logger;
 
+@Builder
 public class RepoUsuariosImpl implements RepoUsuarios {
     public static final String USUARIO_TXT = "usuario.txt";
     public static final Logger log = Logger.getLogger(RepoUsuariosImpl.class);
     private static final DateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-    private RepoUsuariosImpl(){
-
+    public RepoUsuariosImpl() {
+        // TODO document why this constructor is empty
     }
 
-    public static void grabar(Object object) throws IOException {
+    public void grabar(Object object) {
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         Usuario usuario;
         if (object instanceof Paciente paciente) {
@@ -92,7 +94,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         }
     }
 
-    public static Object[] listarUsuarios() {
+    public Object[] listarUsuarios() {
         List<Doctor> listaDoctores = new ArrayList<>();
         List<Paciente> listaPacientes = new ArrayList<>();
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
@@ -134,26 +136,28 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return new Object[]{listaDoctores, listaPacientes};
     }
 
-    public static Usuario buscarPorId(int id) {
+    public Usuario buscarPorId(int id) {
         Usuario usuario = null;
-        try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
-            String line;
-            while ((line = usuariotTxt.readLine()) != null) {
-                String[] partesDeUsuario = line.split("; ");
-                if (partesDeUsuario.length > 1 && id == Integer.parseInt(partesDeUsuario[0])) {
-                    usuario = Usuario.builder()
-                            .id(Integer.parseInt(partesDeUsuario[0]))
-                            .creadoEn(dt1.parse(partesDeUsuario[1]))
-                            .flagDoctor(false)
-                            .nombre(partesDeUsuario[3])
-                            .direccion(partesDeUsuario[4])
-                            .telefono(partesDeUsuario[5])
-                            .email(partesDeUsuario[6])
-                            .build();
+        if (new File(USUARIO_TXT).exists()){
+            try (BufferedReader usuarioTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
+                String line;
+                while ((line = usuarioTxt.readLine()) != null) {
+                    String[] partesDeUsuario = line.split("; ");
+                    if (partesDeUsuario.length > 1 && id == Integer.parseInt(partesDeUsuario[0])) {
+                        usuario = Usuario.builder()
+                                .id(Integer.parseInt(partesDeUsuario[0]))
+                                .creadoEn(dt1.parse(partesDeUsuario[1]))
+                                .flagDoctor(false)
+                                .nombre(partesDeUsuario[3])
+                                .direccion(partesDeUsuario[4])
+                                .telefono(partesDeUsuario[5])
+                                .email(partesDeUsuario[6])
+                                .build();
+                    }
                 }
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
             }
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
         }
         return usuario;
     }
