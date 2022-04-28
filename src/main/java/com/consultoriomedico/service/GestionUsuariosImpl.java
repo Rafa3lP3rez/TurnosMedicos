@@ -27,7 +27,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 
     public static void pedirDatos(){
         Scanner sc = new Scanner(System.in);
-        String especialidad = null;
+        String especialidad;
         try {
             System.out.print("Se comenzará con la creación de usuario\nPor favor escriba el nombre del usuario: ");
             String nombreUsuario = sc.nextLine();
@@ -39,7 +39,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
                 if (flagDoctorArr[1]) {
                     System.out.print("Escriba la dirección del usuario: ");
                     String direccion = sc.nextLine();
-                    System.out.print("Escriba el telefono del usuario: ");
+                    System.out.print("Escriba el telefono del usuario con la extensión de su país: ");
                     String telefono = sc.nextLine();
                     System.out.print("Escriba el email del usuario: ");
                     String email = sc.nextLine();
@@ -119,7 +119,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         log.info(String.format("[GestionUsuariosImpl][buscarUsuarioPorId] Buscando usuario por ID: %s", id));
         Usuario usuario = RepoUsuariosImpl.builder().build().buscarPorId(id);
         if (usuario != null) {
-            System.out.println("Se encontró el siguiente Usuario con ese id: \n" + usuario.toString());
+            System.out.println("Se encontró el siguiente Usuario con ese id: \n" + usuario);
         } else {
             System.out.printf("No se encontró ningún usuario con el id: %s", id);
         }

@@ -1,6 +1,7 @@
 package com.consultoriomedico.repository;
 
 
+import com.consultoriomedico.domain.PropertiesConfig;
 import com.consultoriomedico.domain.Usuario;
 import lombok.Builder;
 import org.apache.log4j.Logger;
@@ -19,20 +20,14 @@ public class EmailSender {
 
     private static int port = 25;
     private static boolean debug = true;
-    private static final String CONFIG_FILE_PATH = "src/main/resources/config.properties";
     private static final String MAIL_CONFIRMATION_PATH = "src/main/resources/confirmationMail.html";
     private static final Logger log = Logger.getLogger(EmailSender.class);
+
 
     private static String senderEmail = "clinicakodigo@gmail.com";
 
     public void sendMail(Usuario usuario, String subject) {
-        Properties propConfig = new Properties();
-        try (FileInputStream propInput = new FileInputStream(CONFIG_FILE_PATH)) {
-            propConfig.load(propInput);
-        } catch (IOException e) {
-            log.error(e);
-        }
-
+        PropertiesConfig properties = new PropertiesConfig();
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -43,7 +38,7 @@ public class EmailSender {
         Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(propConfig.getProperty("username"), propConfig.getProperty("password"));
+                return new PasswordAuthentication(properties.getPropertyConfig("username"), properties.getPropertyConfig("password"));
             }
         };
         Session session = Session.getInstance(props, auth);

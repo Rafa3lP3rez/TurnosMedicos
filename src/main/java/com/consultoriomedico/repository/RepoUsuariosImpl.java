@@ -73,6 +73,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
                 }
                 sendMailConfirmation(usuario);
+                SmsSender.builder().build().sendSms(usuario.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
             } catch (Exception e) {
                 log.error(e);
                 log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
