@@ -1,6 +1,7 @@
-package com.consultoriomedico.domain;
+package com.consultoriomedico.repository;
 
 
+import com.consultoriomedico.domain.Usuario;
 import lombok.Builder;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -24,7 +25,7 @@ public class EmailSender {
 
     private static String senderEmail = "clinicakodigo@gmail.com";
 
-    public void sendMail( Usuario usuario, String subject){
+    public void sendMail(Usuario usuario, String subject){
         Properties propConfig = new Properties();
         try(FileInputStream propInput = new FileInputStream(CONFIG_FILE_PATH)) {
             propConfig.load(propInput);

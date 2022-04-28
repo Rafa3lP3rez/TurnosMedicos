@@ -1,7 +1,6 @@
 package com.consultoriomedico.repository;
 
 import com.consultoriomedico.domain.Doctor;
-import com.consultoriomedico.domain.EmailSender;
 import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
 

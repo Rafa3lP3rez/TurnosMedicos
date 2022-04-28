@@ -69,3 +69,5 @@
 [2022-04-27 14:42:02] [ INFO ] [RepoUsuariosImpl:21] [RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario
 [2022-04-27 14:42:02] [ INFO ] [RepoUsuariosImpl:73] [RepoUsuariosImpl][grabar] Fin de llamada grabación usuario
 [2022-04-27 14:42:02] [ DEBUG] [Consola:13] Finalizando Programa
+[2022-04-28 09:00:17] [ INFO ] [Consola:11] Iniciando Programa
+[2022-04-28 09:00:17] [ INFO ] [GestionUsuariosImpl:20] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
