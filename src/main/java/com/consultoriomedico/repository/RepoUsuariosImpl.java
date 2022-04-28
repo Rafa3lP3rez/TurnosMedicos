@@ -77,7 +77,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         try {
             log.info("[RepoUsuariosImpl][sendMail] Enviando correo de confirmación");
             EmailSender sender = EmailSender.builder().build();
-            sender.sendMail(usuario.getEmail(), "Correo Prueba", "Este es un correo de prueba");
+            sender.sendMail(usuario, "Correo Prueba");
         }catch(Exception e) {
             log.error(e);
             log.info("[RepoUsuariosImpl][sendMail] Error al enviar el correo de confirmación");
