@@ -8,6 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @ToString(callSuper = true)
-public class Doctor extends Usuario{
+public class Doctor extends Usuario {
     private String especialidad;
 }

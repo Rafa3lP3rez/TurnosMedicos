@@ -71,3 +71,76 @@
 [2022-04-27 14:42:02] [ DEBUG] [Consola:13] Finalizando Programa
 [2022-04-28 09:00:17] [ INFO ] [Consola:11] Iniciando Programa
 [2022-04-28 09:00:17] [ INFO ] [GestionUsuariosImpl:20] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:14:10] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 10:14:10] [ INFO ] [GestionCitasImpl:21] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:14:56] [ INFO ] [Consola:11] Iniciando Programa
+[2022-04-29 10:14:56] [ INFO ] [GestionUsuariosImpl:19] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:15:26] [ INFO ] [GestionUsuariosImpl:57] [GestionUsuariosImpl][pedirDatos] -> Doctor(super=Usuario(flagDoctor=true, nombre=Rafael, direccion=Berlin, telefono=503, email=alberto98214@gmail.com), especialidad=Cardiologo)
+[2022-04-29 10:15:26] [ INFO ] [RepoUsuariosImpl:25] [RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario
+[2022-04-29 10:15:26] [ INFO ] [RepoUsuariosImpl:84] [RepoUsuariosImpl][sendMail] Enviando correo de confirmación
+[2022-04-29 10:15:26] [ ERROR] [PropertiesConfig:26] java.io.FileNotFoundException: src\main\resources\config.properties (El sistema no puede encontrar el archivo especificado)
+[2022-04-29 10:15:31] [ INFO ] [RepoUsuariosImpl:87] [RepoUsuariosImpl][sendMail] Correo enviado exitosamente de confirmación
+[2022-04-29 10:15:31] [ INFO ] [RepoUsuariosImpl:77] [RepoUsuariosImpl][grabar] Fin de llamada grabación usuario
+[2022-04-29 10:15:31] [ INFO ] [Consola:13] Finalizando Programa
+[2022-04-29 10:16:04] [ INFO ] [Consola:11] Iniciando Programa
+[2022-04-29 10:16:04] [ INFO ] [GestionUsuariosImpl:19] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:16:35] [ INFO ] [RepoUsuariosImpl:25] [RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario
+[2022-04-29 10:16:35] [ INFO ] [RepoUsuariosImpl:84] [RepoUsuariosImpl][sendMail] Enviando correo de confirmación
+[2022-04-29 10:16:35] [ ERROR] [PropertiesConfig:26] java.io.FileNotFoundException: src\main\resources\config.properties (El sistema no puede encontrar el archivo especificado)
+[2022-04-29 10:16:40] [ INFO ] [RepoUsuariosImpl:87] [RepoUsuariosImpl][sendMail] Correo enviado exitosamente de confirmación
+[2022-04-29 10:16:40] [ INFO ] [RepoUsuariosImpl:77] [RepoUsuariosImpl][grabar] Fin de llamada grabación usuario
+[2022-04-29 10:16:40] [ INFO ] [GestionUsuariosImpl:69] [GestionUsuariosImpl][pedirDatos] -> Paciente(super=Usuario(flagDoctor=false, nombre=Ashley, direccion=Mercedes, telefono=503, email=asnofeh@gmail.com))
+[2022-04-29 10:16:40] [ INFO ] [Consola:13] Finalizando Programa
+[2022-04-29 10:16:54] [ INFO ] [Consola:11] Iniciando Programa
+[2022-04-29 10:16:54] [ INFO ] [GestionUsuariosImpl:19] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:17:22] [ INFO ] [GestionUsuariosImpl:57] [GestionUsuariosImpl][pedirDatos] -> Doctor(super=Usuario(flagDoctor=true, nombre=Juarez, direccion=jbgue, telefono=21435, email=jndcie@gmail.com), especialidad=Pediatra)
+[2022-04-29 10:17:22] [ INFO ] [RepoUsuariosImpl:25] [RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario
+[2022-04-29 10:17:22] [ INFO ] [RepoUsuariosImpl:84] [RepoUsuariosImpl][sendMail] Enviando correo de confirmación
+[2022-04-29 10:17:22] [ ERROR] [PropertiesConfig:26] java.io.FileNotFoundException: src\main\resources\config.properties (El sistema no puede encontrar el archivo especificado)
+[2022-04-29 10:17:27] [ INFO ] [RepoUsuariosImpl:87] [RepoUsuariosImpl][sendMail] Correo enviado exitosamente de confirmación
+[2022-04-29 10:17:27] [ INFO ] [RepoUsuariosImpl:77] [RepoUsuariosImpl][grabar] Fin de llamada grabación usuario
+[2022-04-29 10:17:27] [ INFO ] [Consola:13] Finalizando Programa
+[2022-04-29 10:17:57] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 10:17:57] [ INFO ] [GestionCitasImpl:21] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:18:04] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 10:19:45] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 10:19:45] [ INFO ] [GestionCitasImpl:21] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:19:51] [ ERROR] [GestionCitasImpl:88] java.util.NoSuchElementException
+[2022-04-29 10:19:51] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 10:20:04] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 10:20:05] [ INFO ] [GestionCitasImpl:21] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:20:11] [ ERROR] [GestionCitasImpl:88] java.util.NoSuchElementException
+[2022-04-29 10:20:11] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 10:22:25] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 10:22:25] [ INFO ] [GestionCitasImpl:21] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 10:22:32] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 14:26:59] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 14:26:59] [ INFO ] [GestionCitasImpl:24] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 14:27:55] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 14:30:04] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 14:30:04] [ INFO ] [GestionCitasImpl:24] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 14:30:50] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 14:34:32] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 14:34:32] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 14:35:04] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 14:57:57] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 14:57:57] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 14:58:27] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 15:40:29] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 15:40:29] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 15:42:05] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 15:45:01] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 15:45:01] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 15:46:03] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 15:46:03] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 15:46:27] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 15:46:27] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 15:47:40] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 15:47:42] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 15:47:42] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 15:48:13] [ INFO ] [Consola:15] Finalizando Programa
+[2022-04-29 15:48:38] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 15:48:38] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 16:00:19] [ INFO ] [Consola:12] Iniciando Programa
+[2022-04-29 16:00:19] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-04-29 16:00:56] [ INFO ] [Consola:15] Finalizando Programa

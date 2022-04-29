@@ -11,10 +11,10 @@ import org.apache.log4j.Logger;
 public class SmsSender {
     private static final Logger log = Logger.getLogger(SmsSender.class);
 
-    public void sendSms(String numberToSend, String messageToSend){
+    public void sendSms(String numberToSend, String messageToSend) {
         PropertiesConfig propConfig = new PropertiesConfig();
 
-        try{
+        try {
             Twilio.init(propConfig.getPropertyConfig("ACCOUNT_SID"), propConfig.getPropertyConfig("AUTH_TOKEN"));
             Message message = Message.creator(new PhoneNumber(numberToSend), propConfig.getPropertyConfig("MESSAGING_SERVICE_SID"), messageToSend).create();
             log.info(String.format("[TwilioSmsSender][sendSms] Respuesta del servicio Twilio: %s", message.getSid()));

@@ -4,4 +4,6 @@ import com.consultoriomedico.domain.*;
 
 public interface GestionCitas {
 
+    void crearCita();
+
 }

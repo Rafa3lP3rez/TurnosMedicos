@@ -24,7 +24,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         }
     }
 
-    public void pedirDatos(){
+    public void pedirDatos() {
         Scanner sc = new Scanner(System.in);
         String especialidad;
         try {
@@ -111,6 +111,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         }
     }
 
+
     public void buscarUsuarioPorId() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Por favor introduce el id a buscar: ");
@@ -123,7 +124,6 @@ public class GestionUsuariosImpl implements GestionUsuarios {
             System.out.printf("No se encontró ningún usuario con el id: %s", id);
         }
     }
-
 
 
 }

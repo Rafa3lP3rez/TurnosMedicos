@@ -91,7 +91,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         }
     }
 
-    public List<Doctor> listarDoctores(){
+    public List<Doctor> listarDoctores() {
         ArrayList<Doctor> listaDoctores = new ArrayList<>();
 
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
@@ -122,7 +122,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return listaDoctores;
     }
 
-    public List<Paciente> listarPacientes(){
+    public List<Paciente> listarPacientes() {
         ArrayList<Paciente> listaPacientes = new ArrayList<>();
 
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
@@ -151,18 +151,19 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return listaPacientes;
     }
 
-    public List<Doctor> listarDoctoresPorEspeciliadad(String especialidad){
+    public List<Doctor> listarDoctoresPorEspeciliadad(String especialidad) {
         ArrayList<Doctor> listDoctores = (ArrayList<Doctor>) listarDoctores();
         ArrayList<Doctor> listDoctoresEspecialidad = new ArrayList<>();
         for (Doctor doctor : listDoctores) {
-            if (doctor.getEspecialidad().equalsIgnoreCase(especialidad.toLowerCase())) listDoctoresEspecialidad.add(doctor);
+            if (doctor.getEspecialidad().equalsIgnoreCase(especialidad.toLowerCase()))
+                listDoctoresEspecialidad.add(doctor);
         }
         return listDoctoresEspecialidad;
     }
 
     public Usuario buscarPorId(int id) {
         Usuario usuario = null;
-        if (new File(USUARIO_TXT).exists()){
+        if (new File(USUARIO_TXT).exists()) {
             try (BufferedReader usuarioTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
                 String line;
                 while ((line = usuarioTxt.readLine()) != null) {
@@ -171,7 +172,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                         usuario = Usuario.builder()
                                 .id(Integer.parseInt(partesDeUsuario[0]))
                                 .creadoEn(dt1.parse(partesDeUsuario[1]))
-                                .flagDoctor(false)
+                                .flagDoctor(Integer.parseInt(partesDeUsuario[2]) == 1)
                                 .nombre(partesDeUsuario[3])
                                 .direccion(partesDeUsuario[4])
                                 .telefono(partesDeUsuario[5])

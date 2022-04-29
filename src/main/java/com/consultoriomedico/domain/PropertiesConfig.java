@@ -14,11 +14,11 @@ public class PropertiesConfig {
     private static final Logger log = Logger.getLogger(PropertiesConfig.class);
     private Properties propertiesConfigVar = null;
 
-    public PropertiesConfig(){
+    public PropertiesConfig() {
         cargarProperties();
     }
 
-    private void cargarProperties(){
+    private void cargarProperties() {
         Properties propConfig = new Properties();
         try (FileInputStream propInput = new FileInputStream(CONFIG_FILE_PATH)) {
             propConfig.load(propInput);
@@ -28,7 +28,7 @@ public class PropertiesConfig {
         propertiesConfigVar = propConfig;
     }
 
-    public String getPropertyConfig(String propertyName){
+    public String getPropertyConfig(String propertyName) {
         if (propertiesConfigVar != null) return propertiesConfigVar.getProperty(propertyName);
         else return "";
     }
