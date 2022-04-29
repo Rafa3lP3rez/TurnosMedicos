@@ -7,16 +7,15 @@ import java.util.Scanner;
 
 import com.consultoriomedico.domain.*;
 import com.consultoriomedico.repository.RepoUsuariosImpl;
+import lombok.Builder;
 import org.apache.log4j.Logger;
 
+
+@Builder
 public class GestionUsuariosImpl implements GestionUsuarios {
     public static final Logger log = Logger.getLogger(GestionUsuariosImpl.class);
 
-    private GestionUsuariosImpl() {
-
-    }
-
-    public static void crearUsuario() {
+    public void crearUsuario() {
         log.info("[GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario");
         try {
             pedirDatos();
@@ -25,7 +24,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         }
     }
 
-    public static void pedirDatos(){
+    public void pedirDatos(){
         Scanner sc = new Scanner(System.in);
         String especialidad;
         try {
@@ -78,7 +77,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         }
     }
 
-    public static boolean[] validarDoctor() {
+    public boolean[] validarDoctor() {
         Scanner sc = new Scanner(System.in);
         int iterDoctorAnswer = 0;
         boolean flagDoctor = false;
@@ -98,10 +97,10 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         return new boolean[]{flagDoctor, iterDoctorAnswer < 3};
     }
 
-    public static void listarUsuarios() {
+    public void listarUsuarios() {
         log.info("[GestionUsuariosImpl][listarUsuarios] Se listarán los usuarios y pacientes");
-        ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) RepoUsuariosImpl.builder().build().listarUsuarios()[0];
-        ArrayList<Paciente> listaPacientes = (ArrayList<Paciente>) RepoUsuariosImpl.builder().build().listarUsuarios()[1];
+        ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) RepoUsuariosImpl.builder().build().listarDoctores();
+        ArrayList<Paciente> listaPacientes = (ArrayList<Paciente>) RepoUsuariosImpl.builder().build().listarPacientes();
         System.out.println("Lista de doctores");
         for (Doctor doctor : listaDoctores) {
             System.out.println(doctor.toString());
@@ -112,7 +111,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         }
     }
 
-    public static void buscarUsuarioPorId() {
+    public void buscarUsuarioPorId() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Por favor introduce el id a buscar: ");
         int id = sc.nextInt();
@@ -124,5 +123,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
             System.out.printf("No se encontró ningún usuario con el id: %s", id);
         }
     }
+
+
 
 }

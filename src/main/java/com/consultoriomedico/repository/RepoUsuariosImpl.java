@@ -21,10 +21,6 @@ public class RepoUsuariosImpl implements RepoUsuarios {
     public static final Logger log = Logger.getLogger(RepoUsuariosImpl.class);
     private static final DateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-    public RepoUsuariosImpl() {
-        // TODO document why this constructor is empty
-    }
-
     public void grabar(Object object) {
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         Usuario usuario;
@@ -73,7 +69,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
                 }
                 sendMailConfirmation(usuario);
-                SmsSender.builder().build().sendSms(usuario.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+                //SmsSender.builder().build().sendSms(usuario.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
             } catch (Exception e) {
                 log.error(e);
                 log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
@@ -95,9 +91,9 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         }
     }
 
-    public Object[] listarUsuarios() {
-        List<Doctor> listaDoctores = new ArrayList<>();
-        List<Paciente> listaPacientes = new ArrayList<>();
+    public List<Doctor> listarDoctores(){
+        ArrayList<Doctor> listaDoctores = new ArrayList<>();
+
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
             String line;
             while ((line = usuariotTxt.readLine()) != null) {
@@ -117,7 +113,25 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                                 .build();
 
                         listaDoctores.add(doctor);
-                    } else {
+                    }
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return listaDoctores;
+    }
+
+    public List<Paciente> listarPacientes(){
+        ArrayList<Paciente> listaPacientes = new ArrayList<>();
+
+        try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
+            String line;
+            while ((line = usuariotTxt.readLine()) != null) {
+                String[] partesDeUsuario = line.split("; ");
+                if (partesDeUsuario.length > 1) {
+                    boolean flagDoctor = Integer.parseInt(partesDeUsuario[2]) == 1;
+                    if (!flagDoctor) {
                         Paciente paciente = Paciente.builder()
                                 .id(Integer.parseInt(partesDeUsuario[0]))
                                 .creadoEn(dt1.parse(partesDeUsuario[1]))
@@ -134,7 +148,16 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-        return new Object[]{listaDoctores, listaPacientes};
+        return listaPacientes;
+    }
+
+    public List<Doctor> listarDoctoresPorEspeciliadad(String especialidad){
+        ArrayList<Doctor> listDoctores = (ArrayList<Doctor>) listarDoctores();
+        ArrayList<Doctor> listDoctoresEspecialidad = new ArrayList<>();
+        for (Doctor doctor : listDoctores) {
+            if (doctor.getEspecialidad().equalsIgnoreCase(especialidad.toLowerCase())) listDoctoresEspecialidad.add(doctor);
+        }
+        return listDoctoresEspecialidad;
     }
 
     public Usuario buscarPorId(int id) {

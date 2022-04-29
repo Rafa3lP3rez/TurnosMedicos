@@ -1,7 +1,6 @@
 package com.consultoriomedico.domain;
 
-import com.consultoriomedico.repository.EmailSender;
-import lombok.Builder;
+
 import lombok.Data;
 import org.apache.log4j.Logger;
 

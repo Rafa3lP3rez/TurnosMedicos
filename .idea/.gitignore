@@ -2,6 +2,6 @@
 /shelf/
 /workspace.xml
 usuario.txt
-config.properties
+src/main/resources/config.properties
 index.pb
-general.log
+log/general.log

@@ -6,8 +6,6 @@ import lombok.experimental.SuperBuilder;
 import java.util.Date;
 
 @Data
-//@AllArgsConstructor
-//@NoArgsConstructor
 @SuperBuilder
 public class Entidad {
     private int id;

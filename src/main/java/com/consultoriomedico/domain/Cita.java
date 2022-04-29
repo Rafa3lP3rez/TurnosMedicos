@@ -12,6 +12,4 @@ import java.util.Date;
 @SuperBuilder
 public class Cita extends Entidad {
     private Date fecha;
-    private Time desde;
-    private Time hasta;
 }

@@ -9,7 +9,7 @@ public class Consola {
 
     public static void main(String[] args) {
         log.info("Iniciando Programa");
-        GestionUsuariosImpl.crearUsuario();
+        GestionUsuariosImpl.builder().build().listarUsuarios();
         log.info("Finalizando Programa");
     }
 }
