@@ -2,6 +2,7 @@ package com.consultoriomedico.service;
 
 import com.consultoriomedico.domain.Cita;
 import com.consultoriomedico.domain.Doctor;
+import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
 import com.consultoriomedico.repository.RepoCitasImpl;
 import com.consultoriomedico.repository.RepoUsuariosImpl;
@@ -86,10 +87,24 @@ public class GestionCitasImpl implements GestionCitas {
             } else System.out.println("No se encontraron citas asociadas con ese doctor");
         } else  {
             System.out.printf("No se encuentra ningún doctor con el id: %s", idDoctor);
+        }       
+
+    }
+    public void listarCitaPorPaciente(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Por favor digita el id del paciente: ");
+        int idPaciente = sc.nextInt();
+        Paciente paciente = RepoUsuariosImpl.builder().build().buscarPacientePorId(idPaciente);
+        if (paciente != null ){
+            System.out.printf("Para el paciente %s con id %s se tienen las siguientes citas: %n%n", paciente.getNombre(), paciente.getId());
+            ArrayList<Cita> listaCitas = (ArrayList<Cita>) RepoCitasImpl.builder().build().listarCitasPorPaciente(paciente);
+            if (!listaCitas.isEmpty()){
+                for (Cita cita: listaCitas) {
+                    System.out.println(cita);
+                }
+            } else System.out.println("No se encontraron citas asociadas con ese paciente");
+        } else  {
+            System.out.printf("No se encuentra paciente con el id: %s", idPaciente);
         }
     }
-
-
-
-
 }

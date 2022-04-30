@@ -84,6 +84,32 @@ public class RepoCitasImpl implements RepoCitas {
         return listCitas;
     }
 
+    @Override
+    public List<Cita> listarCitasPorPaciente(Paciente paciente) {
+        log.info(String.format("[RepoCitasImpl][listarPorPaciente] Listando citas por paciente, paciente recibido -> %s", paciente));
+        List<Cita> listaPacientes = new ArrayList<>();
+        try (BufferedReader lines = new BufferedReader(new FileReader(CITA_TXT))){
+            String line;
+            while((line = lines.readLine()) != null){
+                String[] parteCitas = line.split(";");
+                if (parteCitas.length > 1 && Integer.parseInt(parteCitas[2]) == paciente.getId()) {
+                    listaPacientes.add(Cita.builder()
+                            .id(Integer.parseInt(parteCitas[0]))
+                            .creadoEn(dt1.parse(parteCitas[4]))
+                            .idCita(Integer.parseInt(parteCitas[0]))
+                            .idPaciente(Integer.parseInt(parteCitas[2]))
+                            .idDoctor(Integer.parseInt(parteCitas[1]))
+                            .fecha(dt1.parse(parteCitas[3]))
+                            .build()
+                    );
+                }
+            }
+        }catch (IOException | ParseException e){
+            log.error(e);
+        }
+        return listaPacientes;
+    }
+
     public void listarPorPaciente(Object[] pacientes) {
     //TODO
 

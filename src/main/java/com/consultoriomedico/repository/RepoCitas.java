@@ -11,7 +11,7 @@ public interface RepoCitas {
 
     List<Cita> listarCitasPorDoctor(Doctor doctor);
 
-    void listarPorPaciente(Object[] pacientes);
+    List<Cita> listarCitasPorPaciente(Paciente paciente);
 
     Usuario buscar(Long id);
 
