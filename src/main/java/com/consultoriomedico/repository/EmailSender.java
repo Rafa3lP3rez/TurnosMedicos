@@ -1,6 +1,7 @@
 package com.consultoriomedico.repository;
 
 
+import com.consultoriomedico.domain.Cita;
 import com.consultoriomedico.domain.PropertiesConfig;
 import com.consultoriomedico.domain.Usuario;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Builder
-public class EmailSender {
+public class EmailSender implements IConfirmadorCitas {
 
     private static int port = 25;
     private static boolean debug = true;
@@ -68,7 +69,7 @@ public class EmailSender {
         }
     }
 
-    public String modifiedHtmlConfirmation(Usuario usuario) throws IOException {
+    private String modifiedHtmlConfirmation(Usuario usuario) throws IOException {
         File flHtml = new File(MAIL_CONFIRMATION_PATH);
         Document doc = Jsoup.parse(flHtml, "UTF-8", "");
         Element p = doc.getElementById("idNombre");
@@ -88,5 +89,10 @@ public class EmailSender {
             p.append(usuario.getTelefono());
         }
         return doc.html();
+    }
+
+    public boolean enviarConfirmacion(Usuario usuario, Cita cita) {
+        //TODO: IMPLEMENTAR ENVIAR CONFIMACION
+        return true;
     }
 }

@@ -1,6 +1,8 @@
 package com.consultoriomedico.repository;
 
+import com.consultoriomedico.domain.Cita;
 import com.consultoriomedico.domain.PropertiesConfig;
+import com.consultoriomedico.domain.Usuario;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -8,7 +10,7 @@ import lombok.Builder;
 import org.apache.log4j.Logger;
 
 @Builder
-public class SmsSender {
+public class SmsSender implements IConfirmadorCitas {
     private static final Logger log = Logger.getLogger(SmsSender.class);
 
     public void sendSms(String numberToSend, String messageToSend) {
@@ -21,5 +23,10 @@ public class SmsSender {
         } catch (Exception e) {
             log.error(e);
         }
+    }
+
+    public boolean enviarConfirmacion(Usuario usuario, Cita cita) {
+        //TODO: IMPLEMENTAR ENVIAR CONFIMACION
+        return true;
     }
 }
