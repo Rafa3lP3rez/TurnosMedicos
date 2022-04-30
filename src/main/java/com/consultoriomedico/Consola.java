@@ -10,8 +10,8 @@ public class Consola {
 
     public static void main(String[] args) {
         log.info("Iniciando Programa");
-        GestionCitasImpl gestionCitas = new GestionCitasImpl();
-        gestionCitas.crearCita();
+        //GestionUsuariosImpl.builder().build().crearUsuario();
+        GestionCitasImpl.builder().build().listarCitaPorDoctor();
         log.info("Finalizando Programa");
     }
 }

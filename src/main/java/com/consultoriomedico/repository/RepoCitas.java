@@ -1,17 +1,20 @@
 package com.consultoriomedico.repository;
 
 
-import com.consultoriomedico.domain.Cita;
-import com.consultoriomedico.domain.Doctor;
-import com.consultoriomedico.domain.Paciente;
-import com.consultoriomedico.domain.Usuario;
+import com.consultoriomedico.domain.*;
+
+import java.util.List;
 
 public interface RepoCitas {
 
-    void listarPorDoctor(Object[] doctores);
+    void grabar (Cita cita);
+
+    List<Cita> listarCitasPorDoctor(Doctor doctor);
 
     void listarPorPaciente(Object[] pacientes);
 
     Usuario buscar(Long id);
+
+    void sendMailConfirmation(Usuario usuario);
 
 }

@@ -51,20 +51,20 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             try (BufferedWriter usuarioTxt = new BufferedWriter(new FileWriter(USUARIO_TXT, true))) {
                 usuarioTxt.newLine();
                 usuarioTxt.append(String.valueOf(usuario.getId()));
-                usuarioTxt.append("; ");
+                usuarioTxt.append(";");
                 usuarioTxt.append(dt1.format(usuario.getCreadoEn()));
-                usuarioTxt.append("; ");
+                usuarioTxt.append(";");
                 usuarioTxt.append(String.valueOf(flagDoctorNumber));
-                usuarioTxt.append("; ");
+                usuarioTxt.append(";");
                 usuarioTxt.append(usuario.getNombre());
-                usuarioTxt.append("; ");
+                usuarioTxt.append(";");
                 usuarioTxt.append(usuario.getDireccion());
-                usuarioTxt.append("; ");
+                usuarioTxt.append(";");
                 usuarioTxt.append(usuario.getTelefono());
-                usuarioTxt.append("; ");
+                usuarioTxt.append(";");
                 usuarioTxt.append(usuario.getEmail());
                 if (usuario.isFlagDoctor()) {
-                    usuarioTxt.append("; ");
+                    usuarioTxt.append(";");
                     assert usuario instanceof Doctor;
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
                 }
@@ -97,7 +97,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
             String line;
             while ((line = usuariotTxt.readLine()) != null) {
-                String[] partesDeUsuario = line.split("; ");
+                String[] partesDeUsuario = line.split(";");
                 if (partesDeUsuario.length > 1) {
                     boolean flagDoctor = Integer.parseInt(partesDeUsuario[2]) == 1;
                     if (flagDoctor) {
@@ -128,7 +128,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
             String line;
             while ((line = usuariotTxt.readLine()) != null) {
-                String[] partesDeUsuario = line.split("; ");
+                String[] partesDeUsuario = line.split(";");
                 if (partesDeUsuario.length > 1) {
                     boolean flagDoctor = Integer.parseInt(partesDeUsuario[2]) == 1;
                     if (!flagDoctor) {
@@ -167,7 +167,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             try (BufferedReader usuarioTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
                 String line;
                 while ((line = usuarioTxt.readLine()) != null) {
-                    String[] partesDeUsuario = line.split("; ");
+                    String[] partesDeUsuario = line.split(";");
                     if (partesDeUsuario.length > 1 && id == Integer.parseInt(partesDeUsuario[0])) {
                         usuario = Usuario.builder()
                                 .id(Integer.parseInt(partesDeUsuario[0]))
@@ -178,6 +178,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                                 .telefono(partesDeUsuario[5])
                                 .email(partesDeUsuario[6])
                                 .build();
+                        break;
                     }
                 }
             } catch (IOException | ParseException e) {
@@ -185,5 +186,31 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             }
         }
         return usuario;
+    }
+
+    public Doctor buscarDoctorPorId(int id) {
+        Doctor doctor = null;
+        try(BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))){
+            String line;
+            while ((line = lines.readLine()) != null){
+                String[] arrayDatos = line.split(";");
+                if(arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 1 && Integer.parseInt(arrayDatos[0]) == id){
+                    doctor = Doctor.builder().
+                            id(Integer.parseInt(arrayDatos[0]))
+                            .creadoEn(dt1.parse(arrayDatos[1]))
+                            .flagDoctor(true)
+                            .nombre(arrayDatos[3])
+                            .direccion(arrayDatos[4])
+                            .telefono(arrayDatos[5])
+                            .email(arrayDatos[6])
+                            .especialidad(arrayDatos[7])
+                            .build();
+                    break;
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return doctor;
     }
 }
