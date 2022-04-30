@@ -213,4 +213,28 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         }
         return doctor;
     }
+
+    public Paciente buscarPacientePorId(int id){
+        Paciente paciente = null;
+        try(BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))){
+            String line;
+            while ((line = lines.readLine()) != null){
+                String[] arrayDatos = line.split(";");
+                if(arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 0 && Integer.parseInt(arrayDatos[0]) == id){
+                    paciente = Paciente.builder().id(Integer.parseInt(arrayDatos[0]))
+                            .creadoEn(dt1.parse((arrayDatos[1])))
+                            .flagDoctor(false)
+                            .nombre(arrayDatos[3])
+                            .direccion(arrayDatos[4])
+                            .telefono(arrayDatos[5])
+                            .email(arrayDatos[6])
+                            .build();
+                    break;
+                }
+            }
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+        return paciente;
+    }
 }
