@@ -110,11 +110,6 @@ public class RepoCitasImpl implements RepoCitas {
         return listaPacientes;
     }
 
-    public void listarPorPaciente(Object[] pacientes) {
-    //TODO
-
-    }
-
     public Usuario buscar(Long id) {
         return null;
     }
