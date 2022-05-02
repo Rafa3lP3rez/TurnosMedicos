@@ -8,4 +8,8 @@ public interface GestionCitas {
 
     void buscarCitaPorID();
 
+    void listarCitaPorDoctor();
+
+    void listarCitaPorPaciente();
+
 }

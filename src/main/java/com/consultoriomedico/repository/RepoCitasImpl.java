@@ -121,7 +121,8 @@ public class RepoCitasImpl implements RepoCitas {
         } catch (IOException | ParseException e) {
             log.error(e);
         }
-        id = cita.getId() + 1;
+        if (cita != null) id = cita.getId() + 1;
+        else id = 1;
         return id;
     }
 

@@ -5,4 +5,11 @@ public interface GestionUsuarios {
 
     void crearUsuario();
 
+    void pedirDatos();
+
+    boolean[] validarDoctor();
+
+    void listarUsuarios();
+
+    void buscarUsuarioPorId();
 }

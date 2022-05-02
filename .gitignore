@@ -1,2 +1,4 @@
 /src/main/resources/config.properties
 !/log/general.log
+/log/general.log
+!/.idea/sonarlint/issuestore/index.pb
