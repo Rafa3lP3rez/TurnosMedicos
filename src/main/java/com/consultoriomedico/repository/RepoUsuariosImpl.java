@@ -83,7 +83,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         try {
             log.info("[RepoUsuariosImpl][sendMail] Enviando correo de confirmación");
             EmailSender sender = EmailSender.builder().build();
-            sender.sendMail(usuario, "Correo Confirmación de Registro");
+            sender.enviarConfirmacionUsuario(usuario);
             log.info("[RepoUsuariosImpl][sendMail] Correo enviado exitosamente de confirmación");
         } catch (Exception e) {
             log.error(e);
@@ -190,11 +190,11 @@ public class RepoUsuariosImpl implements RepoUsuarios {
 
     public Doctor buscarDoctorPorId(int id) {
         Doctor doctor = null;
-        try(BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))){
+        try (BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))) {
             String line;
-            while ((line = lines.readLine()) != null){
+            while ((line = lines.readLine()) != null) {
                 String[] arrayDatos = line.split(";");
-                if(arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 1 && Integer.parseInt(arrayDatos[0]) == id){
+                if (arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 1 && Integer.parseInt(arrayDatos[0]) == id) {
                     doctor = Doctor.builder().
                             id(Integer.parseInt(arrayDatos[0]))
                             .creadoEn(dt1.parse(arrayDatos[1]))
@@ -214,13 +214,13 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return doctor;
     }
 
-    public Paciente buscarPacientePorId(int id){
+    public Paciente buscarPacientePorId(int id) {
         Paciente paciente = null;
-        try(BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))){
+        try (BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))) {
             String line;
-            while ((line = lines.readLine()) != null){
+            while ((line = lines.readLine()) != null) {
                 String[] arrayDatos = line.split(";");
-                if(arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 0 && Integer.parseInt(arrayDatos[0]) == id){
+                if (arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 0 && Integer.parseInt(arrayDatos[0]) == id) {
                     paciente = Paciente.builder().id(Integer.parseInt(arrayDatos[0]))
                             .creadoEn(dt1.parse((arrayDatos[1])))
                             .flagDoctor(false)

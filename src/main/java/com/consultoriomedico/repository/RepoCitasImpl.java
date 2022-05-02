@@ -22,33 +22,22 @@ public class RepoCitasImpl implements RepoCitas {
     public static final Logger log = Logger.getLogger(RepoCitasImpl.class);
     private static final DateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-    public void grabar(Cita cita) {
+    public void grabar(Cita cita, Usuario usuario, Doctor doctor) {
         log.info("[RepoCitaImpl][grabar] Inicio de llamada grabación de la cita");
-        Cita cita1;
 
-        cita1 = Cita.builder().id(cita.getIdCita())
-                .idCita(cita.getIdCita())
-                .idDoctor(cita.getIdDoctor())
-                .idPaciente(cita.getIdPaciente())
-                .fecha(cita.getFecha())
-                .creadoEn(cita.getCreadoEn())
-                .build();
-
-
-        if (cita1 != null) {
-
+        if (cita != null) {
             try (BufferedWriter citaTxt = new BufferedWriter(new FileWriter(CITA_TXT, true))) {
                 citaTxt.newLine();
-                citaTxt.append(String.valueOf(cita1.getIdCita()));
+                citaTxt.append(String.valueOf(cita.getIdCita()));
                 citaTxt.append(";");
-                citaTxt.append(String.valueOf(cita1.getIdDoctor()));
+                citaTxt.append(String.valueOf(cita.getIdDoctor()));
                 citaTxt.append(";");
-                citaTxt.append(String.valueOf(cita1.getIdPaciente()));
+                citaTxt.append(String.valueOf(cita.getIdPaciente()));
                 citaTxt.append(";");
-                citaTxt.append(dt1.format(cita1.getFecha()));
+                citaTxt.append(dt1.format(cita.getFecha()));
                 citaTxt.append(";");
-                citaTxt.append(dt1.format(cita1.getCreadoEn()));
-                //sendMailConfirmation(cita1);
+                citaTxt.append(dt1.format(cita.getCreadoEn()));
+                sendMailConfirmation(usuario, cita, doctor);
 
             } catch (Exception e) {
                 log.error(e);
@@ -84,7 +73,7 @@ public class RepoCitasImpl implements RepoCitas {
         return listCitas;
     }
 
-    @Override
+
     public List<Cita> listarCitasPorPaciente(Paciente paciente) {
         log.info(String.format("[RepoCitasImpl][listarPorPaciente] Listando citas por paciente, paciente recibido -> %s", paciente));
         List<Cita> listaPacientes = new ArrayList<>();
@@ -114,12 +103,12 @@ public class RepoCitasImpl implements RepoCitas {
         return null;
     }
 
-    public void sendMailConfirmation(Usuario usuario) {
+    public void sendMailConfirmation(Usuario usuario, Cita cita, Doctor doctor) {
         try {
             log.info("[RepoCitaImpl][sendMail] Enviando correo de confirmación");
             EmailSender sender = EmailSender.builder().build();
-            sender.sendMail(usuario, "Correo Confirmación de Registro");
-            log.info("[RepoUsuariosImpl][sendMail] Correo enviado exitosamente de confirmación");
+            sender.enviarConfirmacionCita(usuario, cita, doctor);
+            log.info("[RepoCitaImpl][sendMail] Correo enviado exitosamente de confirmación");
         } catch (Exception e) {
             log.error(e);
             log.info("[RepoCitaImpl][sendMail] Error al enviar el correo de confirmación");

@@ -10,8 +10,9 @@ public class Consola {
 
 
     private static final Logger log = Logger.getLogger(Consola.class);
+
     //region menu y submenus
-    static int subMenuUsuario(){
+    static int subMenuUsuario() {
         int op;
         Scanner sc = new Scanner(System.in);
         StringBuilder sb = new StringBuilder();
@@ -19,13 +20,14 @@ public class Consola {
         sb.append("1. Crear usuario").append(System.lineSeparator());
         sb.append("2. Listar usuarios").append(System.lineSeparator());
         sb.append("3. Buscar usuario por ID").append(System.lineSeparator());
-        sb.append("5. Volver a menu principal").append(System.lineSeparator());
+        sb.append("4. Volver a menu principal").append(System.lineSeparator());
         sb.append("Seleccione la opción:");
         System.out.println(sb);
         op = sc.nextInt();
         return op;
     }
-    static int subMenuCita(){
+
+    static int subMenuCita() {
         int op;
         Scanner sc = new Scanner(System.in);
         StringBuilder sb = new StringBuilder();
@@ -40,7 +42,8 @@ public class Consola {
         op = sc.nextInt();
         return op;
     }
-    static int menu(){
+
+    static int menu() {
         int op;
         Scanner sc = new Scanner(System.in);
         StringBuilder sb = new StringBuilder();
@@ -53,18 +56,19 @@ public class Consola {
         op = sc.nextInt();
         return op;
     }
+
     //endregion
     public static void main(String[] args) {
         log.info("Iniciando Programa");
         int opc;
         do {
             opc = menu();
-            switch (opc){
+            switch (opc) {
                 case 1:
                     //region SubMenu usuarios
                     int opUsuario = subMenuUsuario();
-                    do{
-                        switch (opUsuario){
+                    do {
+                        switch (opUsuario) {
                             case 1:
                                 GestionUsuariosImpl.builder().build().crearUsuario();
                                 System.out.println("Usuario creado exitosamente");
@@ -81,17 +85,15 @@ public class Consola {
                             default:
                                 System.out.println("La opcion no esta disponible");
                         }
-                        //System.out.print("\033[H\033[2J");
                         opUsuario = subMenuUsuario();
-                    }while (opUsuario != 4);
+                    } while (opUsuario != 4);
                     break;
-                    //endregion
+                //endregion
                 case 2:
                     //region SubMenu citas
-                    //System.out.print("\033[H\033[2J");
                     int opCita = subMenuCita();
-                    do{
-                        switch (opCita){
+                    do {
+                        switch (opCita) {
                             case 1:
                                 GestionCitasImpl.builder().build().crearCita();
                                 break;
@@ -111,9 +113,9 @@ public class Consola {
                                 System.out.println("La opcion no esta disponible");
                         }
                         opCita = subMenuCita();
-                    }while (opCita != 5);
+                    } while (opCita != 5);
                     break;
-                    //endregion
+                //endregion
                 case 3:
                     System.out.println("¡Hasta pronto!");
                     break;
@@ -122,11 +124,6 @@ public class Consola {
             }
         } while (opc != 3);
 
-
-        //GestionUsuariosImpl.builder().build().crearUsuario();
-        //GestionCitasImpl.builder().build().listarCitaPorDoctor();
-        //GestionCitasImpl.builder().build().crearCita();
-        //GestionCitasImpl.builder().build().listarCitaPorPaciente();
         log.info("Finalizando Programa");
     }
 }

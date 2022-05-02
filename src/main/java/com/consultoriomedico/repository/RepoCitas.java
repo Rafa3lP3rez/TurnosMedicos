@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RepoCitas {
 
-    void grabar (Cita cita);
+    void grabar(Cita cita, Usuario usuario, Doctor doctor);
 
     List<Cita> listarCitasPorDoctor(Doctor doctor);
 
@@ -15,6 +15,6 @@ public interface RepoCitas {
 
     Usuario buscar(Long id);
 
-    void sendMailConfirmation(Usuario usuario);
+    void sendMailConfirmation(Usuario usuario, Cita cita, Doctor doctor);
 
 }
