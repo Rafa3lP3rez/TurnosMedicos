@@ -13,8 +13,12 @@ public interface RepoCitas {
 
     List<Cita> listarCitasPorPaciente(Paciente paciente);
 
+    int obtenerIdCita();
+
     Usuario buscar(Long id);
 
     void sendMailConfirmation(Usuario usuario, Cita cita, Doctor doctor);
+
+    Cita buscarPorId(int id);
 
 }

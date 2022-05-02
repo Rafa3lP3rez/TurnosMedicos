@@ -99,6 +99,32 @@ public class RepoCitasImpl implements RepoCitas {
         return listaPacientes;
     }
 
+    @Override
+    public int obtenerIdCita() {
+        int id = 0;
+        Cita cita = null;
+        try (BufferedReader lines = new BufferedReader(new FileReader(CITA_TXT))){
+            String line;
+            while ((line = lines.readLine()) != null) {
+                String[] parteCitas = line.split(";");
+                if(parteCitas.length > 1 ) {
+                    cita = Cita.builder()
+                            .id(Integer.parseInt(parteCitas[0]))
+                            .creadoEn(dt1.parse(parteCitas[4]))
+                            .idCita(Integer.parseInt(parteCitas[0]))
+                            .idPaciente(Integer.parseInt(parteCitas[2]))
+                            .idDoctor(Integer.parseInt(parteCitas[1]))
+                            .fecha(dt1.parse(parteCitas[3]))
+                            .build();
+                }
+            }
+        } catch (IOException | ParseException e) {
+            log.error(e);
+        }
+        id = cita.getId() + 1;
+        return id;
+    }
+
     public Usuario buscar(Long id) {
         return null;
     }
@@ -113,5 +139,30 @@ public class RepoCitasImpl implements RepoCitas {
             log.error(e);
             log.info("[RepoCitaImpl][sendMail] Error al enviar el correo de confirmación");
         }
+    }
+
+    @Override
+    public Cita buscarPorId(int id) {
+        Cita cita = null;
+        try (BufferedReader lines = new BufferedReader(new FileReader(CITA_TXT))) {
+            String line;
+            while ((line = lines.readLine()) != null) {
+                String[] parteCitas = line.split(";");
+                if(parteCitas.length > 1 && id == Integer.parseInt(parteCitas[0])) {
+                    cita = Cita.builder()
+                            .id(Integer.parseInt(parteCitas[0]))
+                            .creadoEn(dt1.parse(parteCitas[4]))
+                            .idCita(Integer.parseInt(parteCitas[0]))
+                            .idPaciente(Integer.parseInt(parteCitas[2]))
+                            .idDoctor(Integer.parseInt(parteCitas[1]))
+                            .fecha(dt1.parse(parteCitas[3]))
+                            .build();
+                    break;
+                }
+            }
+        } catch (IOException | ParseException e) {
+            log.error(e);
+        }
+        return cita;
     }
 }

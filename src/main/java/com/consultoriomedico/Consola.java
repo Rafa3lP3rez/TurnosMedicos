@@ -104,7 +104,7 @@ public class Consola {
                                 GestionCitasImpl.builder().build().listarCitaPorDoctor();
                                 break;
                             case 4:
-                                //Buscar cita por id
+                                GestionCitasImpl.builder().build().buscarCitaPorID();
                                 break;
                             case 5:
                                 //Salir

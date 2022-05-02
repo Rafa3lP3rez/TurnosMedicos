@@ -31,6 +31,7 @@ public class GestionCitasImpl implements GestionCitas {
     public void obtenerDatos() {
         Scanner sc = new Scanner(System.in);
         RepoUsuariosImpl repoUsuarios = RepoUsuariosImpl.builder().build();
+        RepoCitasImpl repoCitas = RepoCitasImpl.builder().build();
         try {
             System.out.print("Se comenzará con la creación de la cita\nPor favor escriba en que especialidad quiere su cita: ");
             String especialidadCita = sc.nextLine();
@@ -56,8 +57,9 @@ public class GestionCitasImpl implements GestionCitas {
                 System.out.println("Por favor ingrese la fecha de la cita en el formato: yyyy-mm-dd");
                 String fechaCita = sc.nextLine();
                 Date date = dt1.parse(fechaCita);
+                int id = repoCitas.obtenerIdCita();
 
-                Cita cita = Cita.builder().idCita(1)
+                Cita cita = Cita.builder().idCita(id)
                         .idDoctor(idDoctor)
                         .idPaciente(idPaciente.getId())
                         .fecha(date)
@@ -71,6 +73,20 @@ public class GestionCitasImpl implements GestionCitas {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void buscarCitaPorID() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Por favor, digita el id a buscar:");
+        int id = sc.nextInt();
+        log.info(String.format("[GestionCitasImpl][buscarCitaPorId] Buscando cita por ID %s", id));
+        Cita cita = RepoCitasImpl.builder().build().buscarPorId(id);
+        if( cita != null) {
+            System.out.println("Se encontró la siguiente cita con ese id: \n" + cita);
+        } else {
+            System.out.printf("No se encontró ningua cita con el id: %s", id);
         }
     }
 

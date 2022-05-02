@@ -6,4 +6,6 @@ public interface GestionCitas {
 
     void obtenerDatos();
 
+    void buscarCitaPorID();
+
 }
