@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface RepoUsuarios {
 
-    void grabar(Object usuario);
+    void grabarPaciente(Paciente paciente);
+
+    void grabarDoctor(Doctor doctor);
 
     List<Doctor> listarDoctores();
 

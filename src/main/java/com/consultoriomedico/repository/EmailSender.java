@@ -112,7 +112,7 @@ public class EmailSender implements IConfirmadorCitas {
         }
         p = doc.getElementById("idEspecialidad");
         if (p != null) {
-            p.append(doctor.getEspecialidad());
+            p.append(Integer.toString(doctor.getIdEspecialidad()));
         }
         p = doc.getElementById("idNombreDoctor");
         if (p != null) {

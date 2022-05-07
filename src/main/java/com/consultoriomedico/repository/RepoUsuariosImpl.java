@@ -5,6 +5,7 @@ import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,9 +22,11 @@ public class RepoUsuariosImpl implements RepoUsuarios {
     public static final Logger log = Logger.getLogger(RepoUsuariosImpl.class);
     private static final DateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
+    /*  REFACTOR APLICADO
     public void grabar(Object object) {
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         Usuario usuario;
+        AzureDB azureDB = new AzureDB();
         if (object instanceof Paciente paciente) {
             usuario = Paciente.builder().id(paciente.getId())
                     .creadoEn(paciente.getCreadoEn())
@@ -33,10 +36,11 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                     .telefono(paciente.getTelefono())
                     .email(paciente.getEmail())
                     .build();
+
         } else if (object instanceof Doctor doctor) {
             usuario = Doctor.builder().id(doctor.getId())
                     .creadoEn(doctor.getCreadoEn())
-                    .especialidad(doctor.getEspecialidad())
+                    .idEspecialidad(doctor.getIdEspecialidad())
                     .flagDoctor(doctor.isFlagDoctor())
                     .nombre(doctor.getNombre())
                     .direccion(doctor.getDireccion())
@@ -69,13 +73,47 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                     usuarioTxt.append(((Doctor) usuario).getEspecialidad());
                 }
                 sendMailConfirmation(usuario);
-                SmsSender.builder().build().sendSms(usuario.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+                //SmsSender.builder().build().sendSms(usuario.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
             } catch (Exception e) {
                 log.error(e);
                 log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
             } finally {
                 log.info("[RepoUsuariosImpl][grabar] Fin de llamada grabación usuario");
             }
+        }
+    }*/
+
+    public void grabarPaciente(Paciente paciente){
+        log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
+        try {
+            AzureDB azureDB = new AzureDB();
+            azureDB.insertPacienteStatement(paciente);
+            sendMailConfirmation(paciente);
+            //SmsSender.builder().build().sendSms(paciente.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
+        } finally {
+            log.info("[RepoUsuariosImpl][grabar] Fin de llamada grabación usuario");
+        }
+    }
+
+    public void grabarDoctor(Doctor doctor){
+        log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
+        try {
+            AzureDB azureDB = new AzureDB();
+            azureDB.insertDoctorStatement(doctor);
+            sendMailConfirmation(doctor);
+            //SmsSender.builder().build().sendSms(doctor.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][grabar] Error en la grabación");
+        } finally {
+            log.info("[RepoUsuariosImpl][grabar] Fin de llamada grabación usuario");
         }
     }
 
@@ -109,7 +147,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                                 .direccion(partesDeUsuario[4])
                                 .telefono(partesDeUsuario[5])
                                 .email(partesDeUsuario[6])
-                                .especialidad(partesDeUsuario[7])
+                                .idEspecialidad(Integer.parseInt(partesDeUsuario[7]))
                                 .build();
 
                         listaDoctores.add(doctor);
@@ -151,11 +189,11 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return listaPacientes;
     }
 
-    public List<Doctor> listarDoctoresPorEspeciliadad(String especialidad) {
+    public List<Doctor> listarDoctoresPorEspeciliadad(int especialidad) {
         ArrayList<Doctor> listDoctores = (ArrayList<Doctor>) listarDoctores();
         ArrayList<Doctor> listDoctoresEspecialidad = new ArrayList<>();
         for (Doctor doctor : listDoctores) {
-            if (doctor.getEspecialidad().equalsIgnoreCase(especialidad.toLowerCase()))
+            if (doctor.getIdEspecialidad() == especialidad)
                 listDoctoresEspecialidad.add(doctor);
         }
         return listDoctoresEspecialidad;
@@ -203,7 +241,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
                             .direccion(arrayDatos[4])
                             .telefono(arrayDatos[5])
                             .email(arrayDatos[6])
-                            .especialidad(arrayDatos[7])
+                            .idEspecialidad(Integer.parseInt(arrayDatos[7]))
                             .build();
                     break;
                 }

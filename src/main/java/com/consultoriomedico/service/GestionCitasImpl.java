@@ -34,12 +34,12 @@ public class GestionCitasImpl implements GestionCitas {
         RepoCitasImpl repoCitas = RepoCitasImpl.builder().build();
         try {
             System.out.print("Se comenzará con la creación de la cita\nPor favor escriba en que especialidad quiere su cita: ");
-            String especialidadCita = sc.nextLine();
+            int idEspecialidadCita = sc.nextInt();
 
-            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspeciliadad(especialidadCita);
+            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspeciliadad(idEspecialidadCita);
 
             for (Doctor doctor : especialidadesPorDoctor) {
-                System.out.println("ID Doctor = " + doctor.getId() + ", nombre del doctor = " + doctor.getNombre() + ", especialidad = " + doctor.getEspecialidad());
+                System.out.println("ID Doctor = " + doctor.getId() + ", nombre del doctor = " + doctor.getNombre() + ", especialidad = " + doctor.getIdEspecialidad());
             }
 
             System.out.print("Por favor ingrese el ID del doctor según la especialidad que necesita:\n ");
@@ -76,7 +76,6 @@ public class GestionCitasImpl implements GestionCitas {
         }
     }
 
-    @Override
     public void buscarCitaPorID() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Por favor, digita el id a buscar:");

@@ -9,5 +9,5 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @ToString(callSuper = true)
 public class Doctor extends Usuario {
-    private String especialidad;
+    private int idEspecialidad;
 }

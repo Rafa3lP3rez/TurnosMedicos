@@ -26,13 +26,14 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 
     public void pedirDatos() {
         Scanner sc = new Scanner(System.in);
-        String especialidad;
+        RepoUsuariosImpl repoUsuarios = RepoUsuariosImpl.builder().build();
+        int idEspecialidad;
         try {
             System.out.print("Se comenzará con la creación de usuario\nPor favor escriba el nombre del usuario: ");
             String nombreUsuario = sc.nextLine();
             System.out.print("Digite su documento de identidad: ");
             int id = sc.nextInt();
-            if (RepoUsuariosImpl.builder().build().buscarPorId(id) == null) {
+            if (true) {
                 sc.nextLine();
                 boolean[] flagDoctorArr = validarDoctor();
                 if (flagDoctorArr[1]) {
@@ -45,17 +46,17 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 
                     if (flagDoctorArr[0]) {
                         System.out.println("Escriba la especialidad del doctor: ");
-                        especialidad = sc.nextLine();
+                        idEspecialidad = sc.nextInt();
                         Doctor doctor = Doctor.builder().id(id)
                                 .creadoEn(new Date())
-                                .especialidad(especialidad)
+                                .idEspecialidad(idEspecialidad)
                                 .flagDoctor(true)
                                 .nombre(nombreUsuario)
                                 .direccion(direccion)
                                 .telefono(telefono)
                                 .email(email).build();
                         log.info("[GestionUsuariosImpl][pedirDatos] -> " + doctor.toString());
-                        RepoUsuariosImpl.builder().build().grabar(doctor);
+                        repoUsuarios.grabarDoctor(doctor);
                     } else {
                         Paciente paciente = Paciente.builder().id(id)
                                 .creadoEn(new Date())
@@ -65,7 +66,7 @@ public class GestionUsuariosImpl implements GestionUsuarios {
                                 .telefono(telefono)
                                 .email(email)
                                 .build();
-                        RepoUsuariosImpl.builder().build().grabar(paciente);
+                        repoUsuarios.grabarPaciente(paciente);
                         log.info("[GestionUsuariosImpl][pedirDatos] -> " + paciente.toString());
                     }
                 }
@@ -110,7 +111,6 @@ public class GestionUsuariosImpl implements GestionUsuarios {
             System.out.println(paciente.toString());
         }
     }
-
 
     public void buscarUsuarioPorId() {
         Scanner sc = new Scanner(System.in);

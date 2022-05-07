@@ -99,7 +99,7 @@ public class RepoCitasImpl implements RepoCitas {
         return listaPacientes;
     }
 
-    @Override
+
     public int obtenerIdCita() {
         int id = 0;
         Cita cita = null;
@@ -142,7 +142,6 @@ public class RepoCitasImpl implements RepoCitas {
         }
     }
 
-    @Override
     public Cita buscarPorId(int id) {
         Cita cita = null;
         try (BufferedReader lines = new BufferedReader(new FileReader(CITA_TXT))) {
