@@ -87,9 +87,10 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         try {
             AzureDB azureDB = new AzureDB();
-            azureDB.insertPacienteStatement(paciente);
-            sendMailConfirmation(paciente);
-            //SmsSender.builder().build().sendSms(paciente.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+            if (azureDB.insertPacienteStatement(paciente)) {
+                sendMailConfirmation(paciente);
+                //SmsSender.builder().build().sendSms(paciente.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,10 +105,10 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         try {
             AzureDB azureDB = new AzureDB();
-            azureDB.insertDoctorStatement(doctor);
-            sendMailConfirmation(doctor);
-            //SmsSender.builder().build().sendSms(doctor.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
-
+            if (azureDB.insertDoctorStatement(doctor)) {
+                sendMailConfirmation(doctor);
+                //SmsSender.builder().build().sendSms(doctor.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error(e);
