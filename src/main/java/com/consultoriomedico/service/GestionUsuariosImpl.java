@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import com.consultoriomedico.domain.*;
+import com.consultoriomedico.repository.RepoUsuarios;
 import com.consultoriomedico.repository.RepoUsuariosImpl;
 import lombok.Builder;
 import org.apache.log4j.Logger;
@@ -14,6 +15,7 @@ import org.apache.log4j.Logger;
 @Builder
 public class GestionUsuariosImpl implements GestionUsuarios {
     public static final Logger log = Logger.getLogger(GestionUsuariosImpl.class);
+    RepoUsuarios repoUsuarios;
 
     public void crearUsuario() {
         log.info("[GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario");
@@ -26,52 +28,46 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 
     public void pedirDatos() {
         Scanner sc = new Scanner(System.in);
-        RepoUsuariosImpl repoUsuarios = RepoUsuariosImpl.builder().build();
+        repoUsuarios = RepoUsuariosImpl.builder().build();
         int idEspecialidad;
         try {
             System.out.print("Se comenzará con la creación de usuario\nPor favor escriba el nombre del usuario: ");
             String nombreUsuario = sc.nextLine();
             System.out.print("Digite su documento de identidad: ");
             int id = sc.nextInt();
-            if (true) {
-                sc.nextLine();
-                boolean[] flagDoctorArr = validarDoctor();
-                if (flagDoctorArr[1]) {
-                    System.out.print("Escriba la dirección del usuario: ");
-                    String direccion = sc.nextLine();
-                    System.out.print("Escriba el telefono del usuario con la extensión de su país: ");
-                    String telefono = sc.nextLine();
-                    System.out.print("Escriba el email del usuario: ");
-                    String email = sc.nextLine();
+            sc.nextLine();
+            boolean[] flagDoctorArr = validarDoctor();
+            if (flagDoctorArr[1]) {
+                System.out.print("Escriba la dirección del usuario: ");
+                String direccion = sc.nextLine();
+                System.out.print("Escriba el telefono del usuario con la extensión de su país: ");
+                String telefono = sc.nextLine();
+                System.out.print("Escriba el email del usuario: ");
+                String email = sc.nextLine();
 
-                    if (flagDoctorArr[0]) {
-                        System.out.println("Escriba la especialidad del doctor: ");
-                        idEspecialidad = sc.nextInt();
-                        Doctor doctor = Doctor.builder().id(id)
-                                .creadoEn(new Date())
-                                .idEspecialidad(idEspecialidad)
-                                .flagDoctor(true)
-                                .nombre(nombreUsuario)
-                                .direccion(direccion)
-                                .telefono(telefono)
-                                .email(email).build();
-                        log.info("[GestionUsuariosImpl][pedirDatos] -> " + doctor.toString());
-                        repoUsuarios.grabarDoctor(doctor);
-                    } else {
-                        Paciente paciente = Paciente.builder().id(id)
-                                .creadoEn(new Date())
-                                .flagDoctor(false)
-                                .nombre(nombreUsuario)
-                                .direccion(direccion)
-                                .telefono(telefono)
-                                .email(email)
-                                .build();
-                        repoUsuarios.grabarPaciente(paciente);
-                        log.info("[GestionUsuariosImpl][pedirDatos] -> " + paciente.toString());
-                    }
+                if (flagDoctorArr[0]) {
+                    System.out.println("Escriba la especialidad del doctor: ");
+                    idEspecialidad = sc.nextInt();
+                    Doctor doctor = Doctor.builder().id(id)
+                            .creadoEn(new Date())
+                            .idEspecialidad(idEspecialidad)
+                            .nombre(nombreUsuario)
+                            .direccion(direccion)
+                            .telefono(telefono)
+                            .email(email).build();
+                    log.info("[GestionUsuariosImpl][pedirDatos] -> " + doctor.toString());
+                    repoUsuarios.grabarDoctor(doctor);
+                } else {
+                    Paciente paciente = Paciente.builder().id(id)
+                            .creadoEn(new Date())
+                            .nombre(nombreUsuario)
+                            .direccion(direccion)
+                            .telefono(telefono)
+                            .email(email)
+                            .build();
+                    repoUsuarios.grabarPaciente(paciente);
+                    log.info("[GestionUsuariosImpl][pedirDatos] -> " + paciente.toString());
                 }
-            } else {
-                System.out.println("Ya existe un usuario con ese Documento de identidad, terminando programa");
             }
         } catch (Exception ex) {
             log.error(ex.toString());
@@ -100,8 +96,9 @@ public class GestionUsuariosImpl implements GestionUsuarios {
 
     public void listarUsuarios() {
         log.info("[GestionUsuariosImpl][listarUsuarios] Se listarán los usuarios y pacientes");
-        ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) RepoUsuariosImpl.builder().build().listarDoctores();
-        ArrayList<Paciente> listaPacientes = (ArrayList<Paciente>) RepoUsuariosImpl.builder().build().listarPacientes();
+        repoUsuarios = RepoUsuariosImpl.builder().build();
+        ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) repoUsuarios.listarDoctores();
+        ArrayList<Paciente> listaPacientes = (ArrayList<Paciente>) repoUsuarios.listarPacientes();
         System.out.println("Lista de doctores");
         for (Doctor doctor : listaDoctores) {
             System.out.println(doctor.toString());

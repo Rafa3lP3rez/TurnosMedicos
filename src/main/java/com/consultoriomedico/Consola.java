@@ -61,66 +61,46 @@ public class Consola {
     public static void main(String[] args) {
         log.info("Iniciando Programa");
         int opc;
+        GestionUsuariosImpl gestionUsuarios = GestionUsuariosImpl.builder().build();
+        GestionCitasImpl gestionCitas =  GestionCitasImpl.builder().build();
         do {
             opc = menu();
             switch (opc) {
-                case 1:
+                case 1 -> {
                     //region SubMenu usuarios
                     int opUsuario = subMenuUsuario();
                     do {
                         switch (opUsuario) {
-                            case 1:
-                                GestionUsuariosImpl.builder().build().crearUsuario();
+                            case 1 -> {
+                                gestionUsuarios.crearUsuario();
                                 System.out.println("Usuario creado exitosamente");
-                                break;
-                            case 2:
-                                GestionUsuariosImpl.builder().build().listarUsuarios();
-                                break;
-                            case 3:
-                                GestionUsuariosImpl.builder().build().buscarUsuarioPorId();
-                                break;
-                            case 4:
-                                System.out.println("Volviendo al menu principal");
-                                break;
-                            default:
-                                System.out.println("La opcion no esta disponible");
+                            }
+                            case 2 -> gestionUsuarios.listarUsuarios();
+                            case 3 -> gestionUsuarios.buscarUsuarioPorId();
+                            case 4 -> System.out.println("Volviendo al menu principal");
+                            default -> System.out.println("La opcion no esta disponible");
                         }
                         opUsuario = subMenuUsuario();
                     } while (opUsuario != 4);
-                    break;
+                }
                 //endregion
-                case 2:
+                case 2 -> {
                     //region SubMenu citas
                     int opCita = subMenuCita();
                     do {
                         switch (opCita) {
-                            case 1:
-                                GestionCitasImpl.builder().build().crearCita();
-                                break;
-                            case 2:
-                                GestionCitasImpl.builder().build().listarCitaPorPaciente();
-                                break;
-                            case 3:
-                                GestionCitasImpl.builder().build().listarCitaPorDoctor();
-                                break;
-                            case 4:
-                                GestionCitasImpl.builder().build().buscarCitaPorID();
-                                break;
-                            case 5:
-                                //Salir
-                                break;
-                            default:
-                                System.out.println("La opcion no esta disponible");
+                            case 1 -> gestionCitas.crearCita();
+                            case 2 -> gestionCitas.listarCitaPorPaciente();
+                            case 3 -> gestionCitas.listarCitaPorDoctor();
+                            case 4 -> gestionCitas.buscarCitaPorID();
+                            default -> System.out.println("La opcion no esta disponible");
                         }
                         opCita = subMenuCita();
                     } while (opCita != 5);
-                    break;
+                }
                 //endregion
-                case 3:
-                    System.out.println("¡Hasta pronto!");
-                    break;
-                default:
-                    System.out.println("La opcion no está disponible");
+                case 3 -> System.out.println("¡Hasta pronto!");
+                default -> System.out.println("La opcion no está disponible");
             }
         } while (opc != 3);
 

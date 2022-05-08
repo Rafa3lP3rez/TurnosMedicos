@@ -12,6 +12,10 @@ public interface RepoUsuarios {
 
     void grabarDoctor(Doctor doctor);
 
+    List<Doctor> listarDoctoresPorEspecialiadad(int especialidad);
+
+    Doctor buscarDoctorPorId(int id);
+
     List<Doctor> listarDoctores();
 
     List<Paciente> listarPacientes();

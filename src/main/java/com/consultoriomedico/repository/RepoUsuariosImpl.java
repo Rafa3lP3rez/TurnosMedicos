@@ -130,7 +130,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         }
     }
 
-    public List<Doctor> listarDoctores() {
+    /*public List<Doctor> listarDoctores() {
         ArrayList<Doctor> listaDoctores = new ArrayList<>();
 
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
@@ -159,9 +159,25 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             e.printStackTrace();
         }
         return listaDoctores;
+    }*/
+
+    public List<Doctor> listarDoctores(){
+        log.info("[RepoUsuariosImpl][listarDoctores] Inicio de llamada listar doctores");
+        List<Doctor> listDoctor = null;
+        try {
+            AzureDB azureDB = new AzureDB();
+            listDoctor = azureDB.selectDoctor(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][listarDoctores] Error listando");
+        } finally {
+            log.info("[RepoUsuariosImpl][listarDoctores] Fin de llamada listar doctores");
+        }
+        return listDoctor;
     }
 
-    public List<Paciente> listarPacientes() {
+    /*public List<Paciente> listarPacientes() {
         ArrayList<Paciente> listaPacientes = new ArrayList<>();
 
         try (BufferedReader usuariotTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
@@ -188,9 +204,25 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             e.printStackTrace();
         }
         return listaPacientes;
+    }*/
+
+    public List<Paciente> listarPacientes(){
+        log.info("[RepoUsuariosImpl][listarPacientes] Inicio de llamada listar pacientes");
+        List<Paciente> listPaciente = null;
+        try {
+            AzureDB azureDB = new AzureDB();
+            listPaciente = azureDB.selectPaciente(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][listarPacientes] Error listando");
+        } finally {
+            log.info("[RepoUsuariosImpl][listarPacientes] Fin de llamada listar pacientes");
+        }
+        return listPaciente;
     }
 
-    public List<Doctor> listarDoctoresPorEspeciliadad(int especialidad) {
+    public List<Doctor> listarDoctoresPorEspecialiadad(int especialidad) {
         ArrayList<Doctor> listDoctores = (ArrayList<Doctor>) listarDoctores();
         ArrayList<Doctor> listDoctoresEspecialidad = new ArrayList<>();
         for (Doctor doctor : listDoctores) {

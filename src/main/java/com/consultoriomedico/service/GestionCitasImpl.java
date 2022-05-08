@@ -4,7 +4,9 @@ import com.consultoriomedico.domain.Cita;
 import com.consultoriomedico.domain.Doctor;
 import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
+import com.consultoriomedico.repository.RepoCitas;
 import com.consultoriomedico.repository.RepoCitasImpl;
+import com.consultoriomedico.repository.RepoUsuarios;
 import com.consultoriomedico.repository.RepoUsuariosImpl;
 import lombok.Builder;
 import org.apache.log4j.Logger;
@@ -30,13 +32,15 @@ public class GestionCitasImpl implements GestionCitas {
 
     public void obtenerDatos() {
         Scanner sc = new Scanner(System.in);
-        RepoUsuariosImpl repoUsuarios = RepoUsuariosImpl.builder().build();
-        RepoCitasImpl repoCitas = RepoCitasImpl.builder().build();
+        RepoUsuarios repoUsuarios = RepoUsuariosImpl.builder().build();
+        RepoCitas repoCitas = RepoCitasImpl.builder().build();
+        //RepoUsuariosImpl repoUsuarios = RepoUsuariosImpl.builder().build();
+        //RepoCitasImpl repoCitas = RepoCitasImpl.builder().build();
         try {
             System.out.print("Se comenzará con la creación de la cita\nPor favor escriba en que especialidad quiere su cita: ");
             int idEspecialidadCita = sc.nextInt();
 
-            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspeciliadad(idEspecialidadCita);
+            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspecialiadad(idEspecialidadCita);
 
             for (Doctor doctor : especialidadesPorDoctor) {
                 System.out.println("ID Doctor = " + doctor.getId() + ", nombre del doctor = " + doctor.getNombre() + ", especialidad = " + doctor.getIdEspecialidad());
