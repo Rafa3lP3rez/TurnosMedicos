@@ -4,15 +4,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.consultoriomedico.domain.Doctor;
-import com.consultoriomedico.domain.PropertiesConfig;
-import com.consultoriomedico.domain.Paciente;
-import com.consultoriomedico.domain.Usuario;
+import com.consultoriomedico.domain.*;
 import org.apache.log4j.Logger;
 
-import javax.print.Doc;
 
-public class AzureDB {
+public class AzureDB implements IAzureDB{
     private static final Logger log = Logger.getLogger(AzureDB.class);
     private final String connectionString;
     private static final String OUTPUT_CODE = "OUTPUT_CODE";
@@ -221,6 +217,56 @@ public class AzureDB {
         }
         rs.close();
         return listDoctor;
+    }
+
+    public  List<Especialidad> listEspecialidades() throws SQLException {
+        CallableStatement cstmnt = null;
+        Connection cnn = null;
+        int outPutCode = 0;
+        String message;
+        ResultSet rs = null;
+        List<Especialidad> listEspecialidad = null;
+        try {
+            cnn = DriverManager.getConnection(connectionString);
+            cstmnt = cnn.prepareCall("{CALL [dbo].[SP_LIST_ESPECIALIDADES](?, ?)}");
+            cstmnt.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
+            cstmnt.registerOutParameter(MESSAGE, Types.NVARCHAR);
+            rs = cstmnt.executeQuery();
+            if (rs != null) {
+                listEspecialidad = processResultSetEspecialidad(rs);
+            }
+            outPutCode = cstmnt.getInt(OUTPUT_CODE);
+            message = cstmnt.getNString(MESSAGE);
+            log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
+            System.out.println(message);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (cnn != null) {
+                try {
+                    cnn.close();
+                } catch (SQLException ex) {
+                    log.error(ex);
+                }
+            }
+            if (cstmnt != null) cstmnt.close();
+        }
+        return listEspecialidad;
+    }
+
+    private List<Especialidad> processResultSetEspecialidad(ResultSet rs) throws SQLException{
+        List<Especialidad> listEspecialidad = new ArrayList<>();
+        while(rs.next()){
+            listEspecialidad.add(
+                    Especialidad.builder()
+                            .idEspecialidad(Integer.parseInt(rs.getString("ID_ESPECIALIDAD")))
+                            .nombreEspecialidad(rs.getString("NOMBRE"))
+                            .build()
+            );
+        }
+        rs.close();
+        return listEspecialidad;
     }
 
 }

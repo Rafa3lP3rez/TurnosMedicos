@@ -46,17 +46,14 @@ public class GestionUsuariosImpl implements GestionUsuarios {
                 String email = sc.nextLine();
 
                 if (flagDoctorArr[0]) {
-                    System.out.println("Escriba la especialidad del doctor: ");
-                    idEspecialidad = sc.nextInt();
                     Doctor doctor = Doctor.builder().id(id)
                             .creadoEn(new Date())
-                            .idEspecialidad(idEspecialidad)
                             .nombre(nombreUsuario)
                             .direccion(direccion)
                             .telefono(telefono)
                             .email(email).build();
-                    log.info("[GestionUsuariosImpl][pedirDatos] -> " + doctor.toString());
-                    repoUsuarios.grabarDoctor(doctor);
+                    crearDoctor(doctor);
+
                 } else {
                     Paciente paciente = Paciente.builder().id(id)
                             .creadoEn(new Date())
@@ -71,6 +68,26 @@ public class GestionUsuariosImpl implements GestionUsuarios {
             }
         } catch (Exception ex) {
             log.error(ex.toString());
+        }
+    }
+
+    private void crearDoctor(Doctor doctor){
+        Scanner sc = new Scanner(System.in);
+        int idEspecialidad;
+        repoUsuarios = RepoUsuariosImpl.builder().build();
+        try {
+            ArrayList<Especialidad> listEspecialidad = (ArrayList<Especialidad>) repoUsuarios.listarEspecialidades();
+            System.out.printf("%15s %15s %n", "Especialidad", "Nombre");
+            for (Especialidad especialidad : listEspecialidad ) {
+                System.out.printf("%15s %15s %n", especialidad.getIdEspecialidad(), especialidad.getNombreEspecialidad());
+            }
+            System.out.println("Digite el id de la especialidad asociada al doctor: ");
+            idEspecialidad = sc.nextInt();
+            doctor.setIdEspecialidad(idEspecialidad);
+            log.info("[GestionUsuariosImpl][pedirDatos] -> " + doctor.toString());
+            repoUsuarios.grabarDoctor(doctor);
+        }catch (Exception e){
+            log.error(e);
         }
     }
 
@@ -99,26 +116,36 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         repoUsuarios = RepoUsuariosImpl.builder().build();
         ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) repoUsuarios.listarDoctores();
         ArrayList<Paciente> listaPacientes = (ArrayList<Paciente>) repoUsuarios.listarPacientes();
-        System.out.println("Lista de doctores");
+        System.out.println("Lista de doctores: \n");
+        System.out.printf("%15s %15s %15s %25s %15s %15s %n", "ID_DOCTOR", "ID_ESPECIALIDAD", "NOMBRE", "DIRECCION", "TELEFONO", "EMAIL");
         for (Doctor doctor : listaDoctores) {
-            System.out.println(doctor.toString());
+            System.out.printf("%15s %15s %15s %25s %15s %15s %n", doctor.getId(),
+                    doctor.getIdEspecialidad(), doctor.getNombre(), doctor.getDireccion(), doctor.getTelefono(), doctor.getEmail());
         }
-        System.out.println("\nLista de pacientes: ");
+        System.out.println("\nLista de pacientes: \n");
+        System.out.printf("%15s %15s %25s %15s %15s %n", "ID_PACIENTE",  "NOMBRE", "DIRECCION", "TELEFONO", "EMAIL");
         for (Paciente paciente : listaPacientes) {
-            System.out.println(paciente.toString());
+            System.out.printf("%15s %15s %25s %15s %15s %n", paciente.getId(), paciente.getNombre(),
+                    paciente.getDireccion(), paciente.getTelefono(), paciente.getEmail());
         }
     }
 
     public void buscarUsuarioPorId() {
+        repoUsuarios = RepoUsuariosImpl.builder().build();
         Scanner sc = new Scanner(System.in);
+        System.out.println("Desea buscar un paciente o un doctor (P/D): ");
+        String opcBuscar = sc.nextLine();
         System.out.println("Por favor introduce el id a buscar: ");
         int id = sc.nextInt();
         log.info(String.format("[GestionUsuariosImpl][buscarUsuarioPorId] Buscando usuario por ID: %s", id));
-        Usuario usuario = RepoUsuariosImpl.builder().build().buscarPorId(id);
-        if (usuario != null) {
-            System.out.println("Se encontró el siguiente Usuario con ese id: \n" + usuario);
+        if (opcBuscar.equalsIgnoreCase("P")){
+            Paciente paciente = repoUsuarios.buscarPacientePorId(id);
+            if (paciente != null) System.out.printf("Se encontró el siguiente paciente %s%n", paciente);
+        } else if (opcBuscar.equalsIgnoreCase("D")) {
+            Doctor doctor = repoUsuarios.buscarDoctorPorId(id);
+            if (doctor != null) System.out.printf("Se encontró el siguiente paciente %s%n", doctor);
         } else {
-            System.out.printf("No se encontró ningún usuario con el id: %s", id);
+            System.out.println("Opción inválida \n");
         }
     }
 

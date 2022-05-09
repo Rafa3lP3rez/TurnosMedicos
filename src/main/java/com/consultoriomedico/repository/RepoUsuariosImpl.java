@@ -1,13 +1,9 @@
 package com.consultoriomedico.repository;
 
-import com.consultoriomedico.domain.Doctor;
-import com.consultoriomedico.domain.Paciente;
-import com.consultoriomedico.domain.Usuario;
+import com.consultoriomedico.domain.*;
 
-import java.io.*;
-import java.sql.SQLException;
+
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -86,7 +82,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
     public void grabarPaciente(Paciente paciente){
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         try {
-            AzureDB azureDB = new AzureDB();
+            IAzureDB azureDB = new AzureDB();
             if (azureDB.insertPacienteStatement(paciente)) {
                 sendMailConfirmation(paciente);
                 //SmsSender.builder().build().sendSms(paciente.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
@@ -104,7 +100,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
     public void grabarDoctor(Doctor doctor){
         log.info("[RepoUsuariosImpl][grabar] Inicio de llamada grabación usuario");
         try {
-            AzureDB azureDB = new AzureDB();
+            IAzureDB azureDB = new AzureDB();
             if (azureDB.insertDoctorStatement(doctor)) {
                 sendMailConfirmation(doctor);
                 //SmsSender.builder().build().sendSms(doctor.getTelefono(), "Se creo el usuario con Exito, KodigoClinica");
@@ -165,7 +161,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         log.info("[RepoUsuariosImpl][listarDoctores] Inicio de llamada listar doctores");
         List<Doctor> listDoctor = null;
         try {
-            AzureDB azureDB = new AzureDB();
+            IAzureDB azureDB = new AzureDB();
             listDoctor = azureDB.selectDoctor(false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +206,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         log.info("[RepoUsuariosImpl][listarPacientes] Inicio de llamada listar pacientes");
         List<Paciente> listPaciente = null;
         try {
-            AzureDB azureDB = new AzureDB();
+            IAzureDB azureDB = new AzureDB();
             listPaciente = azureDB.selectPaciente(false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -222,7 +218,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return listPaciente;
     }
 
-    public List<Doctor> listarDoctoresPorEspecialiadad(int especialidad) {
+    public List<Doctor> listarDoctoresPorEspecialidad(int especialidad) {
         ArrayList<Doctor> listDoctores = (ArrayList<Doctor>) listarDoctores();
         ArrayList<Doctor> listDoctoresEspecialidad = new ArrayList<>();
         for (Doctor doctor : listDoctores) {
@@ -232,7 +228,7 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return listDoctoresEspecialidad;
     }
 
-    public Usuario buscarPorId(int id) {
+    /*public Usuario buscarPorId(int id) {
         Usuario usuario = null;
         if (new File(USUARIO_TXT).exists()) {
             try (BufferedReader usuarioTxt = new BufferedReader(new FileReader((USUARIO_TXT)))) {
@@ -257,55 +253,52 @@ public class RepoUsuariosImpl implements RepoUsuarios {
             }
         }
         return usuario;
-    }
+    }*/
 
     public Doctor buscarDoctorPorId(int id) {
-        Doctor doctor = null;
-        try (BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))) {
-            String line;
-            while ((line = lines.readLine()) != null) {
-                String[] arrayDatos = line.split(";");
-                if (arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 1 && Integer.parseInt(arrayDatos[0]) == id) {
-                    doctor = Doctor.builder().
-                            id(Integer.parseInt(arrayDatos[0]))
-                            .creadoEn(dt1.parse(arrayDatos[1]))
-                            .flagDoctor(true)
-                            .nombre(arrayDatos[3])
-                            .direccion(arrayDatos[4])
-                            .telefono(arrayDatos[5])
-                            .email(arrayDatos[6])
-                            .idEspecialidad(Integer.parseInt(arrayDatos[7]))
-                            .build();
-                    break;
-                }
-            }
-        } catch (IOException | ParseException e) {
+        log.info("[RepoUsuariosImpl][buscarDoctorPorId] Inicio de llamada buscar paciente por ID:");
+        List<Doctor> listDoctor = null;
+        try {
+            IAzureDB azureDB = new AzureDB();
+            listDoctor = azureDB.selectDoctor(true, Integer.toString(id));
+        } catch (Exception e) {
             e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][buscarDoctorPorId] Error listando");
+        } finally {
+            log.info("[RepoUsuariosImpl][buscarDoctorPorId] Fin de llamada buscar doctor por Id");
         }
-        return doctor;
+        return (listDoctor != null) ? listDoctor.get(0) : null;
     }
 
     public Paciente buscarPacientePorId(int id) {
-        Paciente paciente = null;
-        try (BufferedReader lines = new BufferedReader(new FileReader(USUARIO_TXT))) {
-            String line;
-            while ((line = lines.readLine()) != null) {
-                String[] arrayDatos = line.split(";");
-                if (arrayDatos.length > 1 && Integer.parseInt(arrayDatos[2]) == 0 && Integer.parseInt(arrayDatos[0]) == id) {
-                    paciente = Paciente.builder().id(Integer.parseInt(arrayDatos[0]))
-                            .creadoEn(dt1.parse((arrayDatos[1])))
-                            .flagDoctor(false)
-                            .nombre(arrayDatos[3])
-                            .direccion(arrayDatos[4])
-                            .telefono(arrayDatos[5])
-                            .email(arrayDatos[6])
-                            .build();
-                    break;
-                }
-            }
-        } catch (IOException | ParseException e) {
+        log.info("[RepoUsuariosImpl][buscarPacientePorId] Inicio de llamada buscar paciente por ID:");
+        List<Paciente> listPaciente = null;
+        try {
+            IAzureDB azureDB = new AzureDB();
+            listPaciente = azureDB.selectPaciente(true, Integer.toString(id));
+        } catch (Exception e) {
             e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][buscarPacientePorId] Error listando");
+        } finally {
+            log.info("[RepoUsuariosImpl][buscarPacientePorId] Fin de llamada buscar doctor por Id");
         }
-        return paciente;
+        return (listPaciente != null) ? listPaciente.get(0) : null;
+    }
+
+    public List<Especialidad> listarEspecialidades(){
+        List<Especialidad> listEspecialidad = null;
+        try {
+            IAzureDB azureDB = new AzureDB();
+            listEspecialidad = azureDB.listEspecialidades();
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            log.info("[RepoUsuariosImpl][buscarPacientePorId] Error listando");
+        } finally {
+            log.info("[RepoUsuariosImpl][buscarPacientePorId] Fin de llamada buscar doctor por Id");
+        }
+        return listEspecialidad;
     }
 }

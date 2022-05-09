@@ -1,6 +1,7 @@
 package com.consultoriomedico.repository;
 
 import com.consultoriomedico.domain.Doctor;
+import com.consultoriomedico.domain.Especialidad;
 import com.consultoriomedico.domain.Paciente;
 import com.consultoriomedico.domain.Usuario;
 
@@ -12,14 +13,18 @@ public interface RepoUsuarios {
 
     void grabarDoctor(Doctor doctor);
 
-    List<Doctor> listarDoctoresPorEspecialiadad(int especialidad);
+    List<Doctor> listarDoctoresPorEspecialidad(int especialidad);
 
     Doctor buscarDoctorPorId(int id);
+
+    Paciente buscarPacientePorId(int id);
 
     List<Doctor> listarDoctores();
 
     List<Paciente> listarPacientes();
 
-    Usuario buscarPorId(int id);
+    List<Especialidad> listarEspecialidades();
+
+    //Usuario buscarPorId(int id);
 
 }

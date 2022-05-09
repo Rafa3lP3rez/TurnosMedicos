@@ -3,7 +3,7 @@ package com.consultoriomedico.service;
 import com.consultoriomedico.domain.Cita;
 import com.consultoriomedico.domain.Doctor;
 import com.consultoriomedico.domain.Paciente;
-import com.consultoriomedico.domain.Usuario;
+
 import com.consultoriomedico.repository.RepoCitas;
 import com.consultoriomedico.repository.RepoCitasImpl;
 import com.consultoriomedico.repository.RepoUsuarios;
@@ -34,13 +34,11 @@ public class GestionCitasImpl implements GestionCitas {
         Scanner sc = new Scanner(System.in);
         RepoUsuarios repoUsuarios = RepoUsuariosImpl.builder().build();
         RepoCitas repoCitas = RepoCitasImpl.builder().build();
-        //RepoUsuariosImpl repoUsuarios = RepoUsuariosImpl.builder().build();
-        //RepoCitasImpl repoCitas = RepoCitasImpl.builder().build();
         try {
             System.out.print("Se comenzará con la creación de la cita\nPor favor escriba en que especialidad quiere su cita: ");
             int idEspecialidadCita = sc.nextInt();
 
-            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspecialiadad(idEspecialidadCita);
+            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspecialidad(idEspecialidadCita);
 
             for (Doctor doctor : especialidadesPorDoctor) {
                 System.out.println("ID Doctor = " + doctor.getId() + ", nombre del doctor = " + doctor.getNombre() + ", especialidad = " + doctor.getIdEspecialidad());
@@ -55,9 +53,9 @@ public class GestionCitasImpl implements GestionCitas {
             int idPa = sc.nextInt();
             sc.nextLine();
 
-            Usuario idPaciente = repoUsuarios.buscarPorId(idPa);
+            Paciente idPaciente = repoUsuarios.buscarPacientePorId(idPa);
 
-            if (idPaciente != null && !idPaciente.isFlagDoctor()) {
+            if (idPaciente != null) {
                 System.out.println("Por favor ingrese la fecha de la cita en el formato: yyyy-mm-dd");
                 String fechaCita = sc.nextLine();
                 Date date = dt1.parse(fechaCita);
