@@ -1,8 +1,6 @@
 package com.consultoriomedico.repository;
 
-import com.consultoriomedico.domain.Doctor;
-import com.consultoriomedico.domain.Especialidad;
-import com.consultoriomedico.domain.Paciente;
+import com.consultoriomedico.domain.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,6 +16,10 @@ public interface IAzureDB {
     List<Doctor> selectDoctor(boolean buscarPorIdFlag, String ... idDoctor) throws SQLException;
 
     List<Especialidad> listEspecialidades() throws SQLException;
+
+    List<Horario> listHorarioDisponiblesXRecomendacion(int idEspecialidad, String fecha) throws SQLException;
+
+    boolean insertCita(Cita cita) throws SQLException;
 
 
 }

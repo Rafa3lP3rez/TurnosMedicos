@@ -95,31 +95,31 @@ public class EmailSender implements IConfirmadorCitas {
         sendMail(usuario.getEmail(), "Confirmación de creación de usuario", content);
     }
 
-    public void enviarConfirmacionCita(Usuario usuario, Cita cita, Doctor doctor) throws IOException {
+    public void enviarConfirmacionCita(Cita cita) throws IOException {
         File flHtml = new File(MAIL_APPOINTMENT_CONFIRMATION_PATH);
         Document doc = Jsoup.parse(flHtml, FORMAT_CHARSET, "");
         Element p = doc.getElementById("idNombre");
         if (p != null) {
-            p.append(usuario.getNombre());
+            p.append(cita.getPaciente().getNombre());
         }
         p = doc.getElementById("idIdentificacion");
         if (p != null) {
-            p.append(String.valueOf(usuario.getId()));
+            p.append(String.valueOf(cita.getPaciente().getId()));
         }
         p = doc.getElementById("idFecha");
         if (p != null) {
-            p.append(dt1.format(cita.getFecha()));
+            p.append(cita.getHorario().getFecha());
         }
         p = doc.getElementById("idEspecialidad");
         if (p != null) {
-            p.append(Integer.toString(doctor.getIdEspecialidad()));
+            p.append(Integer.toString(cita.getDoctor().getIdEspecialidad()));
         }
         p = doc.getElementById("idNombreDoctor");
         if (p != null) {
-            p.append(doctor.getNombre());
+            p.append(cita.getDoctor().getNombre());
         }
         String content = doc.html();
-        sendMail(usuario.getEmail(), "Confirmación de cita", content);
+        sendMail(cita.getPaciente().getEmail(), "Confirmación de cita", content);
     }
 
     public boolean enviarConfirmacion(Usuario usuario, Cita cita) {

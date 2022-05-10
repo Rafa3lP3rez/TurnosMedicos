@@ -1,8 +1,6 @@
 package com.consultoriomedico.service;
 
-import com.consultoriomedico.domain.Cita;
-import com.consultoriomedico.domain.Doctor;
-import com.consultoriomedico.domain.Paciente;
+import com.consultoriomedico.domain.*;
 
 import com.consultoriomedico.repository.RepoCitas;
 import com.consultoriomedico.repository.RepoCitasImpl;
@@ -22,7 +20,7 @@ public class GestionCitasImpl implements GestionCitas {
     private static final DateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
     public void crearCita() {
-        log.info("[GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario");
+        log.info("[GestionUsuariosImpl][crearCita] Inicio de llamada creación cita");
         try {
             obtenerDatos();
         } catch (Exception ex) {
@@ -34,44 +32,46 @@ public class GestionCitasImpl implements GestionCitas {
         Scanner sc = new Scanner(System.in);
         RepoUsuarios repoUsuarios = RepoUsuariosImpl.builder().build();
         RepoCitas repoCitas = RepoCitasImpl.builder().build();
+        GestionUsuarios gestionUsuarios = GestionUsuariosImpl.builder().build();
+        int idEspecialidad;
         try {
-            System.out.print("Se comenzará con la creación de la cita\nPor favor escriba en que especialidad quiere su cita: ");
-            int idEspecialidadCita = sc.nextInt();
-
-            List<Doctor> especialidadesPorDoctor = repoUsuarios.listarDoctoresPorEspecialidad(idEspecialidadCita);
-
-            for (Doctor doctor : especialidadesPorDoctor) {
-                System.out.println("ID Doctor = " + doctor.getId() + ", nombre del doctor = " + doctor.getNombre() + ", especialidad = " + doctor.getIdEspecialidad());
-            }
-
-            System.out.print("Por favor ingrese el ID del doctor según la especialidad que necesita:\n ");
-            int idDoctor = sc.nextInt();
-            Doctor doctor = repoUsuarios.buscarDoctorPorId(idDoctor);
-            sc.nextLine();
-
+            System.out.print("Se comenzará con la creación de la cita\n ");
+            idEspecialidad = gestionUsuarios.seleccionarEspecialidad();
             System.out.print("Por favor ingrese el ID del paciente que necesita:\n ");
             int idPa = sc.nextInt();
             sc.nextLine();
-
-            Paciente idPaciente = repoUsuarios.buscarPacientePorId(idPa);
-
-            if (idPaciente != null) {
-                System.out.println("Por favor ingrese la fecha de la cita en el formato: yyyy-mm-dd");
+            Paciente paciente = repoUsuarios.buscarPacientePorId(idPa);
+            if (paciente != null) {
+                System.out.printf("Por favor %s ingrese la fecha de la cita en el formato: 'yyyy-mm-dd' | EJ : '2022-06-26'%n", paciente.getNombre());
                 String fechaCita = sc.nextLine();
-                Date date = dt1.parse(fechaCita);
-                int id = repoCitas.obtenerIdCita();
+                List<Horario> listHorarios = repoCitas.listarHorariosDisponibles(idEspecialidad, fechaCita);
+                System.out.println("Lista de horarios: \n");
+                System.out.printf("%15s %15s %15s %15s %n", "ID", "DIA", "HORA_INICIO", "HORA_FIN");
+                int index = 0;
+                for (Horario horario : listHorarios) {
+                    System.out.printf("%15s %15s %15s %15s %n", index + 1,
+                            horario.getFecha(), horario.getHoraInicio().substring(0, 8), horario.getHoraFin().substring(0, 8));
+                    index++;
+                }
+                System.out.println("Seleccione el id del horario que desea reservar");
+                int opcId = sc.nextInt() - 1;
+                if (opcId < listHorarios.size()) {
+                    Horario horario = listHorarios.get(opcId);
+                    Doctor doctor = repoUsuarios.buscarDoctorPorId(Integer.parseInt(horario.getIdDoctor()));
+                    repoCitas.grabarCita(
+                            Cita.builder()
+                                    .horario(horario)
+                                    .paciente(paciente)
+                                    .doctor(doctor)
+                                    .build()
+                    );
+                } else {
+                    System.out.println("Opción invalida");
+                }
 
-                Cita cita = Cita.builder().idCita(id)
-                        .idDoctor(idDoctor)
-                        .idPaciente(idPaciente.getId())
-                        .fecha(date)
-                        .creadoEn(new Date())
-                        .build();
-                RepoCitasImpl.builder().build().grabar(cita, idPaciente, doctor);
-                log.info("[GestionCitasImpl][pedirDatos] -> " + cita.toString());
             } else {
                 System.out.println("No se pudo registrar la cita, el paciente no esta registrado");
-                GestionUsuariosImpl.builder().build().crearUsuario();
+                gestionUsuarios.crearUsuario();
             }
         } catch (Exception e) {
             e.printStackTrace();

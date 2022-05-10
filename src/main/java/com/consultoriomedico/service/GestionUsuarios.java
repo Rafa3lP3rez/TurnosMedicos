@@ -12,4 +12,6 @@ public interface GestionUsuarios {
     void listarUsuarios();
 
     void buscarUsuarioPorId();
+
+    int seleccionarEspecialidad();
 }

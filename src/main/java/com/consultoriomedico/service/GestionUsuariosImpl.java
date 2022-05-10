@@ -29,7 +29,6 @@ public class GestionUsuariosImpl implements GestionUsuarios {
     public void pedirDatos() {
         Scanner sc = new Scanner(System.in);
         repoUsuarios = RepoUsuariosImpl.builder().build();
-        int idEspecialidad;
         try {
             System.out.print("Se comenzará con la creación de usuario\nPor favor escriba el nombre del usuario: ");
             String nombreUsuario = sc.nextLine();
@@ -72,23 +71,29 @@ public class GestionUsuariosImpl implements GestionUsuarios {
     }
 
     private void crearDoctor(Doctor doctor){
-        Scanner sc = new Scanner(System.in);
         int idEspecialidad;
         repoUsuarios = RepoUsuariosImpl.builder().build();
         try {
-            ArrayList<Especialidad> listEspecialidad = (ArrayList<Especialidad>) repoUsuarios.listarEspecialidades();
-            System.out.printf("%15s %15s %n", "Especialidad", "Nombre");
-            for (Especialidad especialidad : listEspecialidad ) {
-                System.out.printf("%15s %15s %n", especialidad.getIdEspecialidad(), especialidad.getNombreEspecialidad());
-            }
-            System.out.println("Digite el id de la especialidad asociada al doctor: ");
-            idEspecialidad = sc.nextInt();
+            idEspecialidad = seleccionarEspecialidad();
             doctor.setIdEspecialidad(idEspecialidad);
             log.info("[GestionUsuariosImpl][pedirDatos] -> " + doctor.toString());
             repoUsuarios.grabarDoctor(doctor);
         }catch (Exception e){
             log.error(e);
         }
+    }
+
+    public int seleccionarEspecialidad(){
+        Scanner sc = new Scanner(System.in);
+        repoUsuarios = RepoUsuariosImpl.builder().build();
+        ArrayList<Especialidad> listEspecialidad = (ArrayList<Especialidad>) repoUsuarios.listarEspecialidades();
+        System.out.printf("%15s %15s %n", "Especialidad", "Nombre");
+        for (Especialidad especialidad : listEspecialidad ) {
+            System.out.printf("%15s %15s %n", especialidad.getIdEspecialidad(), especialidad.getNombreEspecialidad());
+        }
+        System.out.println("Digite el id de la especialidad asociada: ");
+
+        return sc.nextInt();
     }
 
     public boolean[] validarDoctor() {
@@ -116,11 +121,15 @@ public class GestionUsuariosImpl implements GestionUsuarios {
         repoUsuarios = RepoUsuariosImpl.builder().build();
         ArrayList<Doctor> listaDoctores = (ArrayList<Doctor>) repoUsuarios.listarDoctores();
         ArrayList<Paciente> listaPacientes = (ArrayList<Paciente>) repoUsuarios.listarPacientes();
+        ArrayList<Especialidad> listaEspecialidad = (ArrayList<Especialidad>) repoUsuarios.listarEspecialidades();
+
         System.out.println("Lista de doctores: \n");
-        System.out.printf("%15s %15s %15s %25s %15s %15s %n", "ID_DOCTOR", "ID_ESPECIALIDAD", "NOMBRE", "DIRECCION", "TELEFONO", "EMAIL");
+        System.out.printf("%15s %15s %15s %25s %15s %15s %n", "ID_DOCTOR", "ESPECIALIDAD", "NOMBRE", "DIRECCION", "TELEFONO", "EMAIL");
         for (Doctor doctor : listaDoctores) {
+            ArrayList<Especialidad> listaEspecialidadTmp = new ArrayList<>(listaEspecialidad);
+            listaEspecialidadTmp.removeIf(o -> (o.getIdEspecialidad() != doctor.getIdEspecialidad()));
             System.out.printf("%15s %15s %15s %25s %15s %15s %n", doctor.getId(),
-                    doctor.getIdEspecialidad(), doctor.getNombre(), doctor.getDireccion(), doctor.getTelefono(), doctor.getEmail());
+                    listaEspecialidadTmp.get(0).getNombreEspecialidad(), doctor.getNombre(), doctor.getDireccion(), doctor.getTelefono(), doctor.getEmail());
         }
         System.out.println("\nLista de pacientes: \n");
         System.out.printf("%15s %15s %25s %15s %15s %n", "ID_PACIENTE",  "NOMBRE", "DIRECCION", "TELEFONO", "EMAIL");

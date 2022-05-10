@@ -2,7 +2,9 @@ package com.consultoriomedico.repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 import com.consultoriomedico.domain.*;
 import org.apache.log4j.Logger;
@@ -28,14 +30,14 @@ public class AzureDB implements IAzureDB{
     }
 
     public boolean insertPacienteStatement(Paciente paciente) throws SQLException {
-        CallableStatement cstmnt = null;
+        CallableStatement callableStatement = null;
         Connection cnn = null;
         boolean result = false;
         try {
             cnn = DriverManager.getConnection(connectionString);
-            cstmnt = cnn.prepareCall("{CALL [dbo].[SP_CREARPACIENTE](?, ?, ?, ?, ?, ?, ?)}");
-            cstmnt.setString("ID_PACIENTE", Integer.toString(paciente.getId()));
-            result = insertUsuarioBaseExec(cstmnt, paciente);
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_CREARPACIENTE](?, ?, ?, ?, ?, ?, ?)}");
+            callableStatement.setString("ID_PACIENTE", Integer.toString(paciente.getId()));
+            result = insertUsuarioBaseExec(callableStatement, paciente);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -46,21 +48,21 @@ public class AzureDB implements IAzureDB{
                     log.error(ex);
                 }
             }
-            if (cstmnt != null) cstmnt.close();
+            if (callableStatement != null) callableStatement.close();
         }
         return result;
     }
 
     public boolean insertDoctorStatement(Doctor doctor) throws SQLException {
-        CallableStatement cstmnt = null;
+        CallableStatement callableStatement = null;
         Connection cnn = null;
         boolean result = false;
         try {
             cnn = DriverManager.getConnection(connectionString);
-            cstmnt = cnn.prepareCall("{CALL [dbo].[SP_CREARDOCTOR](?, ?, ?, ?, ?, ?, ?, ?)}");
-            cstmnt.setString("ID_DOCTOR", Integer.toString(doctor.getId()));
-            cstmnt.setInt("ID_ESPECIALIDAD", doctor.getIdEspecialidad());
-            result = insertUsuarioBaseExec(cstmnt, doctor);
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_CREARDOCTOR](?, ?, ?, ?, ?, ?, ?, ?)}");
+            callableStatement.setString("ID_DOCTOR", Integer.toString(doctor.getId()));
+            callableStatement.setInt("ID_ESPECIALIDAD", doctor.getIdEspecialidad());
+            result = insertUsuarioBaseExec(callableStatement, doctor);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -71,7 +73,7 @@ public class AzureDB implements IAzureDB{
                     log.error(ex);
                 }
             }
-            if (cstmnt != null) cstmnt.close();
+            if (callableStatement != null) callableStatement.close();
         }
         return result;
     }
@@ -91,7 +93,6 @@ public class AzureDB implements IAzureDB{
                 outPutCode = callableBase.getInt(OUTPUT_CODE);
                 message = callableBase.getNString(MESSAGE);
                 log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
-                System.out.println(message);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,7 +103,7 @@ public class AzureDB implements IAzureDB{
     }
 
     public List<Paciente> selectPaciente(boolean buscarPorIdFlag, String ... idUsuario) throws SQLException {
-        CallableStatement cstmnt = null;
+        CallableStatement callableStatement = null;
         Connection cnn = null;
         ResultSet rs = null;
         int outPutCode = 0;
@@ -110,24 +111,23 @@ public class AzureDB implements IAzureDB{
         List<Paciente> listPaciente = null;
         try {
             cnn = DriverManager.getConnection(connectionString);
-            cstmnt = cnn.prepareCall("{CALL [dbo].[SP_LIST_PACIENTE](?, ?, ?, ?)}");
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_LIST_PACIENTE](?, ?, ?, ?)}");
             if ((buscarPorIdFlag)) {
-                cstmnt.setString("ID_USUARIO", idUsuario[0]);
-                cstmnt.setNull("FLAG_T_PACIENTE", Types.NULL);
+                callableStatement.setString("ID_USUARIO", idUsuario[0]);
+                callableStatement.setNull("FLAG_T_PACIENTE", Types.NULL);
             } else {
-                cstmnt.setNull("ID_USUARIO", Types.NULL);
-                cstmnt.setInt("FLAG_T_PACIENTE", 1);
+                callableStatement.setNull("ID_USUARIO", Types.NULL);
+                callableStatement.setInt("FLAG_T_PACIENTE", 1);
             }
-            cstmnt.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
-            cstmnt.registerOutParameter(MESSAGE, Types.NVARCHAR);
-            rs = cstmnt.executeQuery();
+            callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
+            callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
+            rs = callableStatement.executeQuery();
             if (rs != null){
                 listPaciente = processResultSetPaciente(rs);
             }
-            outPutCode = cstmnt.getInt(OUTPUT_CODE);
-            message = cstmnt.getNString(MESSAGE);
+            outPutCode = callableStatement.getInt(OUTPUT_CODE);
+            message = callableStatement.getNString(MESSAGE);
             log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
-            System.out.println(message);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -138,7 +138,7 @@ public class AzureDB implements IAzureDB{
                     log.error(ex);
                 }
             }
-            if (cstmnt != null) cstmnt.close();
+            if (callableStatement != null) callableStatement.close();
         }
         return listPaciente;
     }
@@ -161,7 +161,7 @@ public class AzureDB implements IAzureDB{
     }
 
     public List<Doctor> selectDoctor(boolean buscarPorIdFlag, String ... idDoctor) throws SQLException{
-        CallableStatement cstmnt = null;
+        CallableStatement callableStatement = null;
         Connection cnn = null;
         int outPutCode = 0;
         String message;
@@ -169,24 +169,23 @@ public class AzureDB implements IAzureDB{
         List<Doctor> listDoctor = null;
         try {
             cnn = DriverManager.getConnection(connectionString);
-            cstmnt = cnn.prepareCall("{CALL [dbo].[SP_LIST_DOCTOR](?, ?, ?, ?)}");
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_LIST_DOCTOR](?, ?, ?, ?)}");
             if ((buscarPorIdFlag)) {
-                cstmnt.setString("ID_USUARIO", idDoctor[0]);
-                cstmnt.setNull("FLAG_T_DOCTOR", Types.NULL);
+                callableStatement.setString("ID_USUARIO", idDoctor[0]);
+                callableStatement.setNull("FLAG_T_DOCTOR", Types.NULL);
             } else {
-                cstmnt.setNull("ID_USUARIO", Types.NULL);
-                cstmnt.setInt("FLAG_T_DOCTOR", 1);
+                callableStatement.setNull("ID_USUARIO", Types.NULL);
+                callableStatement.setInt("FLAG_T_DOCTOR", 1);
             }
-            cstmnt.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
-            cstmnt.registerOutParameter(MESSAGE, Types.NVARCHAR);
-            rs = cstmnt.executeQuery();
+            callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
+            callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
+            rs = callableStatement.executeQuery();
             if (rs != null){
                 listDoctor = processResultSetDoctor(rs);
             }
-            outPutCode = cstmnt.getInt(OUTPUT_CODE);
-            message = cstmnt.getNString(MESSAGE);
+            outPutCode = callableStatement.getInt(OUTPUT_CODE);
+            message = callableStatement.getNString(MESSAGE);
             log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
-            System.out.println(message);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -197,7 +196,7 @@ public class AzureDB implements IAzureDB{
                     log.error(ex);
                 }
             }
-            if (cstmnt != null) cstmnt.close();
+            if (callableStatement != null) callableStatement.close();
         }
         return listDoctor;
     }
@@ -212,6 +211,7 @@ public class AzureDB implements IAzureDB{
                             .direccion(rs.getString("DIRECCION"))
                             .telefono(rs.getString("TELEFONO"))
                             .email(rs.getString("EMAIL"))
+                            .idEspecialidad(Integer.parseInt(rs.getString("ID_ESPECIALIDAD")))
                             .build()
             );
         }
@@ -220,7 +220,7 @@ public class AzureDB implements IAzureDB{
     }
 
     public  List<Especialidad> listEspecialidades() throws SQLException {
-        CallableStatement cstmnt = null;
+        CallableStatement callableStatement = null;
         Connection cnn = null;
         int outPutCode = 0;
         String message;
@@ -228,19 +228,17 @@ public class AzureDB implements IAzureDB{
         List<Especialidad> listEspecialidad = null;
         try {
             cnn = DriverManager.getConnection(connectionString);
-            cstmnt = cnn.prepareCall("{CALL [dbo].[SP_LIST_ESPECIALIDADES](?, ?)}");
-            cstmnt.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
-            cstmnt.registerOutParameter(MESSAGE, Types.NVARCHAR);
-            rs = cstmnt.executeQuery();
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_LIST_ESPECIALIDADES](?, ?)}");
+            callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
+            callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
+            rs = callableStatement.executeQuery();
             if (rs != null) {
                 listEspecialidad = processResultSetEspecialidad(rs);
             }
-            outPutCode = cstmnt.getInt(OUTPUT_CODE);
-            message = cstmnt.getNString(MESSAGE);
+            outPutCode = callableStatement.getInt(OUTPUT_CODE);
+            message = callableStatement.getNString(MESSAGE);
             log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
-            System.out.println(message);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (cnn != null) {
@@ -250,7 +248,7 @@ public class AzureDB implements IAzureDB{
                     log.error(ex);
                 }
             }
-            if (cstmnt != null) cstmnt.close();
+            if (callableStatement != null) callableStatement.close();
         }
         return listEspecialidad;
     }
@@ -267,6 +265,112 @@ public class AzureDB implements IAzureDB{
         }
         rs.close();
         return listEspecialidad;
+    }
+
+    public List<Horario> listHorarioDisponiblesXRecomendacion(int idEspecialidad, String fecha) throws SQLException {
+        Scanner sc = new Scanner(System.in);
+        CallableStatement callableStatement = null;
+        Connection cnn = null;
+        int outPutCode = 0;
+        String message;
+        int recibioRecomendacion = 0;
+        String fechaRecomendada;
+        String opcionFecha = "";
+        ResultSet rs = null;
+        List<Horario> listEspecialidad = null;
+        try {
+            cnn = DriverManager.getConnection(connectionString);
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_LIST_CITA_RECOMENDACION](?, ?, ?, ?, ?, ?)}");
+            callableStatement.setInt("ID_ESPECIALIDAD", idEspecialidad);
+            callableStatement.setString("DIA", fecha);
+            callableStatement.registerOutParameter("RECIBIO_RECOMENDACION", Types.INTEGER);
+            callableStatement.registerOutParameter("FECHA_RECOMENDADA", Types.NVARCHAR);
+            callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
+            callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
+            rs = callableStatement.executeQuery();
+            List<Horario> listHorarioTmp = null;
+            if (rs != null) {
+                 listHorarioTmp = processResultSetHorario(rs);
+            } else {
+                return Collections.emptyList();
+            }
+            recibioRecomendacion = callableStatement.getInt("RECIBIO_RECOMENDACION");
+            fechaRecomendada = callableStatement.getNString("FECHA_RECOMENDADA");
+            outPutCode = callableStatement.getInt(OUTPUT_CODE);
+            message = callableStatement.getNString(MESSAGE);
+            log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
+            if (recibioRecomendacion == 1){
+                System.out.printf("No se encontraron horarios disponibles para la fecha '%s', hemos encontrado horarios en la fecha '%s'. ¿Desea visualizarlos? S/N%n", fecha, fechaRecomendada);
+                opcionFecha = sc.nextLine();
+            }
+            if (recibioRecomendacion == 0 || opcionFecha.equalsIgnoreCase("S")) {
+                listEspecialidad = new ArrayList<>(listHorarioTmp);
+            } else {
+                System.out.println("Entendido!");
+            }
+        } catch (SQLException e) {
+                e.printStackTrace();
+        } finally {
+            if (cnn != null) {
+                try {
+                    cnn.close();
+                } catch (SQLException ex) {
+                    log.error(ex);
+                }
+            }
+            if (callableStatement != null) callableStatement.close();
+        }
+        return listEspecialidad;
+    }
+
+    private List<Horario> processResultSetHorario(ResultSet rs) throws SQLException {
+        List<Horario> listHorario = new ArrayList<>();
+        while(rs.next()){
+            listHorario.add(
+                    Horario.builder()
+                            .idDoctor(rs.getString("ID_DOCTOR"))
+                            .fecha(rs.getString("DIA"))
+                            .horaInicio(rs.getString("HORA_INICIO"))
+                            .horaFin(rs.getString("HORA_FIN"))
+                            .build()
+            );
+        }
+        rs.close();
+        return listHorario;
+    }
+
+    public boolean insertCita(Cita cita) throws SQLException{
+        CallableStatement callableStatement = null;
+        Connection cnn = null;
+        int outPutCode = 0;
+        String message;
+        try {
+            cnn = DriverManager.getConnection(connectionString);
+            callableStatement = cnn.prepareCall("{CALL [dbo].[SP_CREARCITA](?, ?, ?, ?, ?, ?, ?)}");
+            callableStatement.setString("ID_DOCTOR", cita.getHorario().getIdDoctor());
+            callableStatement.setString("ID_PACIENTE", Integer.toString(cita.getPaciente().getId()));
+            callableStatement.setString("FECHA", cita.getHorario().getFecha());
+            callableStatement.setString("HORA_INICIO", cita.getHorario().getHoraInicio());
+            callableStatement.setString("HORA_FIN", cita.getHorario().getHoraFin());
+            callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
+            callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
+            callableStatement.execute();
+            outPutCode = callableStatement.getInt(OUTPUT_CODE);
+            message = callableStatement.getNString(MESSAGE);
+            log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (cnn != null) {
+                try {
+                    cnn.close();
+                } catch (SQLException ex) {
+                    log.error(ex);
+                }
+            }
+            if (callableStatement != null) callableStatement.close();
+        }
+        return outPutCode == 1;
     }
 
 }
