@@ -44,6 +44,10 @@ public class RepoCitasImpl implements RepoCitas {
         return Collections.emptyList();
     }
 
+    public void cancelarCita(int idCita){
+        //TODO: Cancelar una cita
+    }
+
     public List<Horario> listarHorariosDisponibles(int idEspecialidad, String fecha){
         log.info("[RepoCitasImpl][listarHorariosDisponibles] Inicio de llamada listar horario:");
         List<Horario> listHorario = null;
@@ -61,6 +65,7 @@ public class RepoCitasImpl implements RepoCitas {
     }
 
     public Cita buscarPorId(int id){
+        //TODO: RETORNAR CITA POR ID
         return Cita.builder().build();
     }
 

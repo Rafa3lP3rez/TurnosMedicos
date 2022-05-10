@@ -218,16 +218,6 @@ public class RepoUsuariosImpl implements RepoUsuarios {
         return listPaciente;
     }
 
-    public List<Doctor> listarDoctoresPorEspecialidad(int especialidad) {
-        ArrayList<Doctor> listDoctores = (ArrayList<Doctor>) listarDoctores();
-        ArrayList<Doctor> listDoctoresEspecialidad = new ArrayList<>();
-        for (Doctor doctor : listDoctores) {
-            if (doctor.getIdEspecialidad() == especialidad)
-                listDoctoresEspecialidad.add(doctor);
-        }
-        return listDoctoresEspecialidad;
-    }
-
     /*public Usuario buscarPorId(int id) {
         Usuario usuario = null;
         if (new File(USUARIO_TXT).exists()) {
