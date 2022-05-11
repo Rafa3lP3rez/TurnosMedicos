@@ -144,3 +144,5 @@
 [2022-04-29 16:00:19] [ INFO ] [Consola:12] Iniciando Programa
 [2022-04-29 16:00:19] [ INFO ] [GestionCitasImpl:25] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
 [2022-04-29 16:00:56] [ INFO ] [Consola:15] Finalizando Programa
+[2022-05-02 15:08:10] [ INFO ] [Consola:62] Iniciando Programa
+[2022-05-02 15:08:17] [ INFO ] [GestionCitasImpl:23] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario

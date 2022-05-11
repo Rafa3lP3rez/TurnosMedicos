@@ -20,7 +20,7 @@ public class AzureDB implements IAzureDB{
         this.connectionString = getConnectionString();
     }
 
-    private String getConnectionString() {
+    public String getConnectionString() {
         PropertiesConfig properties = new PropertiesConfig();
         return "jdbc:sqlserver://" + properties.getPropertyConfig("SERVER_BD") + ":1433;" +
                 "database=" + properties.getPropertyConfig("BD_NAME") + ";" +
@@ -372,5 +372,46 @@ public class AzureDB implements IAzureDB{
         }
         return outPutCode == 1;
     }
+
+
+    public List<Cita> processResultSetListPorPacienteCita(ResultSet rs) throws SQLException{
+        //TODO: LISTAR CITAS POR PACIENTE
+
+
+        Connection connection;
+        PreparedStatement preparedStatement;
+
+        List<Paciente> citas = new ArrayList<>();
+        try{
+
+            connection = DriverManager.getConnection(getConnectionString());
+
+            preparedStatement = connection.prepareStatement("SELECT ID_CITA, ID_DOCTOR, ID_PACIENTE, FECHA, HORA_INICIO, HORA_FIN FROM T_CITA WHere ID_PACIENTE = '71939697' AND ID_ESTADO= 1;");
+
+            RepoUsuarios  repoUsuarios = RepoUsuariosImpl.builder().build();
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+
+                /*Cita.builder().id(resultSet.getInt("ID_CITA"))
+                        .paciente(repoUsuarios.buscarPacientePorId(resultSet.getInt("ID_PACIENTE")))
+                        .doctor(repoUsuarios.buscarDoctorPorId(resultSet.getInt("ID_DOCTOR")))
+                        .horario().build();
+*/
+
+            }
+
+
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+
+        return null;
+
+    }
+
 
 }

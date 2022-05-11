@@ -5,6 +5,7 @@ import lombok.Builder;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.sql.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +42,9 @@ public class RepoCitasImpl implements RepoCitas {
 
     public List<Cita> listarCitasPorPaciente(Paciente paciente) {
         //TODO: LISTAR CITAS POR PACIENTE
-        return Collections.emptyList();
+
+
+        return null;
     }
 
     public List<Horario> listarHorariosDisponibles(int idEspecialidad, String fecha){
