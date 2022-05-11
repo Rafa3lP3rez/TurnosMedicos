@@ -10,7 +10,7 @@ import com.consultoriomedico.domain.*;
 import org.apache.log4j.Logger;
 
 
-public class AzureDB implements IAzureDB{
+public class AzureDB implements IAzureDB {
     private static final Logger log = Logger.getLogger(AzureDB.class);
     private final String connectionString;
     private static final String OUTPUT_CODE = "OUTPUT_CODE";
@@ -102,7 +102,7 @@ public class AzureDB implements IAzureDB{
         return outPutCode == 1;
     }
 
-    public List<Paciente> selectPaciente(boolean buscarPorIdFlag, String ... idUsuario) throws SQLException {
+    public List<Paciente> selectPaciente(boolean buscarPorIdFlag, String... idUsuario) throws SQLException {
         CallableStatement callableStatement = null;
         Connection cnn = null;
         ResultSet rs = null;
@@ -122,7 +122,7 @@ public class AzureDB implements IAzureDB{
             callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
             callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
             rs = callableStatement.executeQuery();
-            if (rs != null){
+            if (rs != null) {
                 listPaciente = processResultSetPaciente(rs);
             }
             outPutCode = callableStatement.getInt(OUTPUT_CODE);
@@ -143,9 +143,9 @@ public class AzureDB implements IAzureDB{
         return listPaciente;
     }
 
-    private List<Paciente> processResultSetPaciente (ResultSet rs) throws SQLException {
+    private List<Paciente> processResultSetPaciente(ResultSet rs) throws SQLException {
         List<Paciente> listPaciente = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             listPaciente.add(
                     Paciente.builder()
                             .id(Integer.parseInt(rs.getString("ID_PACIENTE")))
@@ -160,7 +160,7 @@ public class AzureDB implements IAzureDB{
         return listPaciente;
     }
 
-    public List<Doctor> selectDoctor(boolean buscarPorIdFlag, String ... idDoctor) throws SQLException{
+    public List<Doctor> selectDoctor(boolean buscarPorIdFlag, String... idDoctor) throws SQLException {
         CallableStatement callableStatement = null;
         Connection cnn = null;
         int outPutCode = 0;
@@ -180,7 +180,7 @@ public class AzureDB implements IAzureDB{
             callableStatement.registerOutParameter(OUTPUT_CODE, Types.INTEGER);
             callableStatement.registerOutParameter(MESSAGE, Types.NVARCHAR);
             rs = callableStatement.executeQuery();
-            if (rs != null){
+            if (rs != null) {
                 listDoctor = processResultSetDoctor(rs);
             }
             outPutCode = callableStatement.getInt(OUTPUT_CODE);
@@ -203,7 +203,7 @@ public class AzureDB implements IAzureDB{
 
     private List<Doctor> processResultSetDoctor(ResultSet rs) throws SQLException {
         List<Doctor> listDoctor = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             listDoctor.add(
                     Doctor.builder()
                             .id(Integer.parseInt(rs.getString("ID_DOCTOR")))
@@ -219,7 +219,7 @@ public class AzureDB implements IAzureDB{
         return listDoctor;
     }
 
-    public  List<Especialidad> listEspecialidades() throws SQLException {
+    public List<Especialidad> listEspecialidades() throws SQLException {
         CallableStatement callableStatement = null;
         Connection cnn = null;
         int outPutCode = 0;
@@ -253,9 +253,9 @@ public class AzureDB implements IAzureDB{
         return listEspecialidad;
     }
 
-    private List<Especialidad> processResultSetEspecialidad(ResultSet rs) throws SQLException{
+    private List<Especialidad> processResultSetEspecialidad(ResultSet rs) throws SQLException {
         List<Especialidad> listEspecialidad = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             listEspecialidad.add(
                     Especialidad.builder()
                             .idEspecialidad(Integer.parseInt(rs.getString("ID_ESPECIALIDAD")))
@@ -290,7 +290,7 @@ public class AzureDB implements IAzureDB{
             rs = callableStatement.executeQuery();
             List<Horario> listHorarioTmp = null;
             if (rs != null) {
-                 listHorarioTmp = processResultSetHorario(rs);
+                listHorarioTmp = processResultSetHorario(rs);
             } else {
                 return Collections.emptyList();
             }
@@ -299,7 +299,7 @@ public class AzureDB implements IAzureDB{
             outPutCode = callableStatement.getInt(OUTPUT_CODE);
             message = callableStatement.getNString(MESSAGE);
             log.info(String.format("OUTPUT STORE --> OUTPUT_CODE: %s | MESSAGE : %S", outPutCode, message));
-            if (recibioRecomendacion == 1){
+            if (recibioRecomendacion == 1) {
                 System.out.printf("No se encontraron horarios disponibles para la fecha '%s', hemos encontrado horarios en la fecha '%s'. ¿Desea visualizarlos? S/N%n", fecha, fechaRecomendada);
                 opcionFecha = sc.nextLine();
             }
@@ -309,7 +309,7 @@ public class AzureDB implements IAzureDB{
                 System.out.println("Entendido!");
             }
         } catch (SQLException e) {
-                e.printStackTrace();
+            e.printStackTrace();
         } finally {
             if (cnn != null) {
                 try {
@@ -325,7 +325,7 @@ public class AzureDB implements IAzureDB{
 
     private List<Horario> processResultSetHorario(ResultSet rs) throws SQLException {
         List<Horario> listHorario = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             listHorario.add(
                     Horario.builder()
                             .idDoctor(rs.getString("ID_DOCTOR"))
@@ -339,7 +339,7 @@ public class AzureDB implements IAzureDB{
         return listHorario;
     }
 
-    public boolean insertCita(Cita cita) throws SQLException{
+    public boolean insertCita(Cita cita) throws SQLException {
         CallableStatement callableStatement = null;
         Connection cnn = null;
         int outPutCode = 0;
@@ -373,6 +373,48 @@ public class AzureDB implements IAzureDB{
         return outPutCode == 1;
     }
 
+
+    public List<Cita> ListPorDoctorCita(int idDoctor) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Cita> listCitas = new ArrayList<>();
+        String query;
+        try{
+            connection = DriverManager.getConnection(getConnectionString());
+            query = String.format("SELECT ID_CITA, ID_DOCTOR, ID_PACIENTE, FECHA, HORA_INICIO, HORA_FIN FROM T_CITA WHere ID_DOCTOR = '%s' AND ID_ESTADO= 1;", idDoctor);
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet !=null) {
+                while (resultSet.next()) {
+                    listCitas.add(
+                            Cita.builder().id(resultSet.getInt("ID_CITA"))
+                                    .paciente(selectPaciente(true, Integer.toString(resultSet.getInt("ID_PACIENTE"))).get(0))
+                                    .doctor(selectDoctor(true, Integer.toString(resultSet.getInt(idDoctor))).get(0))
+                                    .horario(
+                                            Horario.builder()
+                                                    .fecha(resultSet.getString("FECHA"))
+                                                    .horaInicio(resultSet.getString("HORA_INICIO"))
+                                                    .horaFin(resultSet.getString("HORA_FIN"))
+                                                    .build()
+                                    ).build()
+                    );
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    log.error(ex);
+                }
+            }
+            if (preparedStatement != null) preparedStatement.close();
+        }
+        return listCitas;
+
+    }
 
     public List<Cita> processResultSetListPorPacienteCita(int idPaciente) throws SQLException{
         Connection connection = null;
@@ -415,6 +457,7 @@ public class AzureDB implements IAzureDB{
         return listCitas;
 
     }
+
 
 
 }

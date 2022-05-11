@@ -23,4 +23,5 @@ public interface IAzureDB {
 
     List<Cita> processResultSetListPorPacienteCita(int idPaciente) throws SQLException;
 
+    public List<Cita> ListPorDoctorCita(int idDoctor) throws SQLException;
 }

@@ -9,7 +9,7 @@ public interface RepoCitas {
 
     void grabarCita(Cita cita);
 
-    List<Cita> listarCitasPorDoctor(Doctor doctor);
+    List<Cita> listarCitasPorDoctor(int idPaciente);
 
     List<Cita> listarCitasPorPaciente(int idPaciente);
 

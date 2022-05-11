@@ -9,6 +9,7 @@ import com.consultoriomedico.repository.RepoUsuariosImpl;
 import lombok.Builder;
 import org.apache.log4j.Logger;
 
+import javax.print.Doc;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -95,13 +96,15 @@ public class GestionCitasImpl implements GestionCitas {
         Scanner sc = new Scanner(System.in);
         System.out.println("Por favor digita el id del doctor: ");
         int idDoctor = sc.nextInt();
-        Doctor doctor = RepoUsuariosImpl.builder().build().buscarDoctorPorId(idDoctor);
+        RepoUsuarios repoUsuario = RepoUsuariosImpl.builder().build();
+        RepoCitas repoCitas = RepoCitasImpl.builder().build();
+        Doctor doctor = repoUsuario.buscarDoctorPorId(idDoctor);
         if (doctor != null) {
             System.out.printf("Para el doctor %s con id %s se tienen las siguientes citas: %n%n", doctor.getNombre(), doctor.getId());
-            ArrayList<Cita> listaCitas = (ArrayList<Cita>) RepoCitasImpl.builder().build().listarCitasPorDoctor(doctor);
+            ArrayList<Cita> listaCitas = (ArrayList<Cita>) RepoCitasImpl.builder().build().listarCitasPorDoctor(idDoctor);
             if (!listaCitas.isEmpty()) {
                 for (Cita cita : listaCitas) {
-                    System.out.println(cita);
+                    System.out.printf("%15s %15s %15s %15s", cita.getId(), cita.getDoctor().toString(), cita.getPaciente().toString(), cita.getHorario().toString());
                 }
             } else System.out.println("No se encontraron citas asociadas con ese doctor");
         } else {
@@ -123,7 +126,7 @@ public class GestionCitasImpl implements GestionCitas {
                 System.out.printf("Para el paciente %s con id %s se tienen las siguientes citas: %n%n", paciente.getNombre(), paciente.getId());
                 if (!listCitas.isEmpty()) {
                     for (Cita cita : listCitas) {
-                        System.out.println(cita);
+                        System.out.printf("%15s %15s %15s %15s", cita.getId(), cita.getDoctor().toString(), cita.getPaciente().toString(), cita.getHorario().toString());
                     }
                 } else System.out.println("No se encontraron citas asociadas con ese paciente");
             } else {
