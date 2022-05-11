@@ -101,12 +101,8 @@ public class GestionCitasImpl implements GestionCitas {
         Doctor doctor = repoUsuario.buscarDoctorPorId(idDoctor);
         if (doctor != null) {
             System.out.printf("Para el doctor %s con id %s se tienen las siguientes citas: %n%n", doctor.getNombre(), doctor.getId());
-            ArrayList<Cita> listaCitas = (ArrayList<Cita>) RepoCitasImpl.builder().build().listarCitasPorDoctor(idDoctor);
-            if (!listaCitas.isEmpty()) {
-                for (Cita cita : listaCitas) {
-                    System.out.printf("%15s %15s %15s %15s %15s %n", cita.getId(), cita.getDoctor().getId(), cita.getPaciente().getId(), cita.getHorario().getHoraInicio(), cita.getHorario().getHoraFin());
-                }
-            } else System.out.println("No se encontraron citas asociadas con ese doctor");
+            ArrayList<Cita> listaCitas = (ArrayList<Cita>) repoCitas.listarCitasPorDoctor(idDoctor);
+            imprimirCitas(listaCitas, doctor);
         } else {
             System.out.printf("No se encuentra ningún doctor con el id: %s", idDoctor);
         }
@@ -122,18 +118,24 @@ public class GestionCitasImpl implements GestionCitas {
         Paciente paciente = repoUsuario.buscarPacientePorId(idPaciente);
         if (paciente != null) {
             List<Cita> listCitas = repoCitas.listarCitasPorPaciente(idPaciente);
-            if (listCitas != null) {
-                System.out.printf("Para el paciente %s con id %s se tienen las siguientes citas: %n%n", paciente.getNombre(), paciente.getId());
-                if (!listCitas.isEmpty()) {
-                    for (Cita cita : listCitas) {
-                        System.out.printf("%15s %15s %15s %15s %15s %n", cita.getId(), cita.getDoctor().getId(), cita.getPaciente().getId(), cita.getHorario().getHoraInicio(), cita.getHorario().getHoraFin());
-                    }
-                } else System.out.println("No se encontraron citas asociadas con ese paciente");
-            } else {
-                System.out.printf("No se encuentra paciente con el id: %s", idPaciente);
-            }
+            imprimirCitas(listCitas, paciente);
         } else {
             System.out.println("No existe un paciente con ese ID");
+        }
+    }
+
+    private void imprimirCitas(List<Cita> listCitas, Usuario usuario){
+        if (listCitas != null) {
+            if (!listCitas.isEmpty()) {
+                System.out.printf("%15s %15s %15s %15s %15s %16s %25s %25s %n", "ID_CITA", "ID_DOCTOR", "NOMBRE_DOCTOR", "ID_PACIENTE", "NOMBRE_PACIENTE", "FECHA", "HORA_INICIO", "HORA_FIN");
+                for (Cita cita : listCitas) {
+                    System.out.printf("%15s %15s %15s %15s %15s %16s %25s %25s %n", cita.getId(), cita.getDoctor().getId(),cita.getDoctor().getNombre(),
+                            cita.getPaciente().getId(), cita.getPaciente().getNombre(), cita.getHorario().getFecha(),
+                            cita.getHorario().getHoraInicio(), cita.getHorario().getHoraFin());
+                }
+            } else System.out.println("No se encontraron citas asociadas al id");
+        } else {
+            System.out.printf("No se encuentran citas con el id: %s", usuario.getId());
         }
     }
 }

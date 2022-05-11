@@ -389,7 +389,7 @@ public class AzureDB implements IAzureDB {
                     listCitas.add(
                             Cita.builder().id(resultSet.getInt("ID_CITA"))
                                     .paciente(selectPaciente(true, Integer.toString(resultSet.getInt("ID_PACIENTE"))).get(0))
-                                    .doctor(selectDoctor(true, Integer.toString(resultSet.getInt(idDoctor))).get(0))
+                                    .doctor(selectDoctor(true, Integer.toString(idDoctor)).get(0))
                                     .horario(
                                             Horario.builder()
                                                     .fecha(resultSet.getString("FECHA"))
