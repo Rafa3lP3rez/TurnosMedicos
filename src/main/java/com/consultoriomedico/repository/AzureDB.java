@@ -374,42 +374,45 @@ public class AzureDB implements IAzureDB{
     }
 
 
-    public List<Cita> processResultSetListPorPacienteCita(ResultSet rs) throws SQLException{
-        //TODO: LISTAR CITAS POR PACIENTE
-
-
-        Connection connection;
-        PreparedStatement preparedStatement;
-
-        List<Paciente> citas = new ArrayList<>();
+    public List<Cita> processResultSetListPorPacienteCita(int idPaciente) throws SQLException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        List<Cita> listCitas = new ArrayList<>();
+        String query;
         try{
-
             connection = DriverManager.getConnection(getConnectionString());
-
-            preparedStatement = connection.prepareStatement("SELECT ID_CITA, ID_DOCTOR, ID_PACIENTE, FECHA, HORA_INICIO, HORA_FIN FROM T_CITA WHere ID_PACIENTE = '71939697' AND ID_ESTADO= 1;");
-
-            RepoUsuarios  repoUsuarios = RepoUsuariosImpl.builder().build();
-
+            query = String.format("SELECT ID_CITA, ID_DOCTOR, ID_PACIENTE, FECHA, HORA_INICIO, HORA_FIN FROM T_CITA WHere ID_PACIENTE = '%s' AND ID_ESTADO= 1;", idPaciente);
+            preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-
-                /*Cita.builder().id(resultSet.getInt("ID_CITA"))
-                        .paciente(repoUsuarios.buscarPacientePorId(resultSet.getInt("ID_PACIENTE")))
-                        .doctor(repoUsuarios.buscarDoctorPorId(resultSet.getInt("ID_DOCTOR")))
-                        .horario().build();
-*/
-
+            if (resultSet !=null) {
+                while (resultSet.next()) {
+                    listCitas.add(
+                            Cita.builder().id(resultSet.getInt("ID_CITA"))
+                                    .paciente(selectPaciente(true, Integer.toString(idPaciente)).get(0))
+                                    .doctor(selectDoctor(true, Integer.toString(resultSet.getInt("ID_DOCTOR"))).get(0))
+                                    .horario(
+                                            Horario.builder()
+                                                    .fecha(resultSet.getString("FECHA"))
+                                                    .horaInicio(resultSet.getString("HORA_INICIO"))
+                                                    .horaFin(resultSet.getString("HORA_FIN"))
+                                                    .build()
+                                    ).build()
+                    );
+                }
             }
-
-
-
-        }catch (SQLException e){
+        }catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    log.error(ex);
+                }
+            }
+            if (preparedStatement != null) preparedStatement.close();
         }
-
-
-
-        return null;
+        return listCitas;
 
     }
 

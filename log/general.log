@@ -146,3 +146,39 @@
 [2022-04-29 16:00:56] [ INFO ] [Consola:15] Finalizando Programa
 [2022-05-02 15:08:10] [ INFO ] [Consola:62] Iniciando Programa
 [2022-05-02 15:08:17] [ INFO ] [GestionCitasImpl:23] [GestionUsuariosImpl][crearUsuario] Inicio de llamada creación usuario
+[2022-05-10 22:38:59] [ INFO ] [Consola:62] Iniciando Programa
+[2022-05-10 22:39:06] [ INFO ] [GestionUsuariosImpl:120] [GestionUsuariosImpl][listarUsuarios] Se listarán los usuarios y pacientes
+[2022-05-10 22:39:06] [ INFO ] [RepoUsuariosImpl:161] [RepoUsuariosImpl][listarDoctores] Inicio de llamada listar doctores
+[2022-05-10 22:39:06] [ ERROR] [PropertiesConfig:26] java.io.FileNotFoundException: src\main\resources\config.properties (El sistema no puede encontrar el archivo especificado)
+[2022-05-10 22:39:36] [ INFO ] [RepoUsuariosImpl:171] [RepoUsuariosImpl][listarDoctores] Fin de llamada listar doctores
+[2022-05-10 22:39:36] [ INFO ] [RepoUsuariosImpl:206] [RepoUsuariosImpl][listarPacientes] Inicio de llamada listar pacientes
+[2022-05-10 22:39:36] [ ERROR] [PropertiesConfig:26] java.io.FileNotFoundException: src\main\resources\config.properties (El sistema no puede encontrar el archivo especificado)
+[2022-05-10 22:40:06] [ INFO ] [RepoUsuariosImpl:216] [RepoUsuariosImpl][listarPacientes] Fin de llamada listar pacientes
+[2022-05-10 22:40:06] [ ERROR] [PropertiesConfig:26] java.io.FileNotFoundException: src\main\resources\config.properties (El sistema no puede encontrar el archivo especificado)
+[2022-05-10 22:40:41] [ INFO ] [RepoUsuariosImpl:290] [RepoUsuariosImpl][buscarPacientePorId] Fin de llamada buscar doctor por Id
+[2022-05-10 22:41:20] [ INFO ] [Consola:62] Iniciando Programa
+[2022-05-10 22:41:24] [ INFO ] [GestionCitasImpl:23] [GestionUsuariosImpl][crearCita] Inicio de llamada creación cita
+[2022-05-10 22:41:26] [ INFO ] [AzureDB:240] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:41:26] [ INFO ] [RepoUsuariosImpl:290] [RepoUsuariosImpl][buscarPacientePorId] Fin de llamada buscar doctor por Id
+[2022-05-10 22:41:34] [ INFO ] [Consola:62] Iniciando Programa
+[2022-05-10 22:41:37] [ INFO ] [GestionUsuariosImpl:120] [GestionUsuariosImpl][listarUsuarios] Se listarán los usuarios y pacientes
+[2022-05-10 22:41:37] [ INFO ] [RepoUsuariosImpl:161] [RepoUsuariosImpl][listarDoctores] Inicio de llamada listar doctores
+[2022-05-10 22:41:39] [ INFO ] [AzureDB:188] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:41:39] [ INFO ] [RepoUsuariosImpl:171] [RepoUsuariosImpl][listarDoctores] Fin de llamada listar doctores
+[2022-05-10 22:41:39] [ INFO ] [RepoUsuariosImpl:206] [RepoUsuariosImpl][listarPacientes] Inicio de llamada listar pacientes
+[2022-05-10 22:41:39] [ INFO ] [AzureDB:130] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:41:39] [ INFO ] [RepoUsuariosImpl:216] [RepoUsuariosImpl][listarPacientes] Fin de llamada listar pacientes
+[2022-05-10 22:41:40] [ INFO ] [AzureDB:240] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:41:40] [ INFO ] [RepoUsuariosImpl:290] [RepoUsuariosImpl][buscarPacientePorId] Fin de llamada buscar doctor por Id
+[2022-05-10 22:47:41] [ INFO ] [Consola:62] Iniciando Programa
+[2022-05-10 22:48:11] [ INFO ] [RepoUsuariosImpl:265] [RepoUsuariosImpl][buscarPacientePorId] Inicio de llamada buscar paciente por ID:
+[2022-05-10 22:48:18] [ INFO ] [AzureDB:130] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:48:18] [ INFO ] [RepoUsuariosImpl:275] [RepoUsuariosImpl][buscarPacientePorId] Fin de llamada buscar doctor por Id
+[2022-05-10 22:48:29] [ INFO ] [RepoCitasImpl:44] [RepoCitasImpl][listarCitasPorPaciente] Inicio de llamada listar horario:
+[2022-05-10 22:49:11] [ INFO ] [AzureDB:130] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:49:15] [ INFO ] [AzureDB:188] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:49:42] [ INFO ] [AzureDB:130] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:49:43] [ INFO ] [AzureDB:188] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:49:44] [ INFO ] [AzureDB:130] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:49:45] [ INFO ] [AzureDB:188] OUTPUT STORE --> OUTPUT_CODE: 1 | MESSAGE : STORE EJECUTADO CON EXITO
+[2022-05-10 22:49:45] [ INFO ] [RepoCitasImpl:54] [RepoCitasImpl][listarCitasPorPaciente] Fin de llamada listar cita por paciente

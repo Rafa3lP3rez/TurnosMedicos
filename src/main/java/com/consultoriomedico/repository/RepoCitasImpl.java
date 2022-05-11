@@ -40,11 +40,20 @@ public class RepoCitasImpl implements RepoCitas {
     }
 
 
-    public List<Cita> listarCitasPorPaciente(Paciente paciente) {
-        //TODO: LISTAR CITAS POR PACIENTE
-
-
-        return null;
+    public List<Cita> listarCitasPorPaciente(int idPaciente) {
+        log.info("[RepoCitasImpl][listarCitasPorPaciente] Inicio de llamada listar horario:");
+        List<Cita> listCita = null;
+        try {
+            IAzureDB azureDB = new AzureDB();
+            listCita = azureDB.processResultSetListPorPacienteCita(idPaciente);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e);
+            log.info("[RepoCitasImpl][listarCitasPorPaciente] Error listando");
+        } finally {
+            log.info("[RepoCitasImpl][listarCitasPorPaciente] Fin de llamada listar cita por paciente");
+        }
+        return listCita;
     }
 
     public void cancelarCita(int idCita){

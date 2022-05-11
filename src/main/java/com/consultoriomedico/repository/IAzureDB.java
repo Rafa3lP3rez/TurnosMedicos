@@ -21,5 +21,6 @@ public interface IAzureDB {
 
     boolean insertCita(Cita cita) throws SQLException;
 
+    List<Cita> processResultSetListPorPacienteCita(int idPaciente) throws SQLException;
 
 }
